@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CRM B2B - Instituto de Seguridad Minera (ISEM)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            isem: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              400: '#4ade80',
+              500: '#00A859', // Verde Corporativo Oficial ISEM
+              600: '#008e4a',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              black: '#000000',
+              dark: '#022C22'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Chart.js DataLabels Plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #F4F6F8; color: #1E293B; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #F4F6F8; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00A859; }
+    
+    .white-card {
+      background: #FFFFFF;
+      color: #0F172A;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+    .modal-backdrop {
+      background-color: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(6px);
+    }
+
+    iframe { border: none !important; }
+
+    /* ESTILOS DE IMPRESIÓN EXCLUSIVOS PARA REPORTES PDF */
+    @media print {
+      aside, header, .no-print, #sidebar-backdrop, #toast, #notif-panel, #search-results-dropdown {
+        display: none !important;
+      }
+      body, main {
+        background: #FFFFFF !important;
+        overflow: visible !important;
+        height: auto !important;
+        min-height: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      #sec-reportes {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+      .white-card {
+        box-shadow: none !important;
+        border: 1px solid #E2E8F0 !important;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#F4F6F8] text-slate-800 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+
+  <!-- BACKDROP OSCURO PARA MENU MOVIL -->
+  <div id="sidebar-backdrop" onclick="toggleSidebarMobile()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
+
+  <!-- ==================== SIDEBAR VERDE FOREST ISEM CON LOGO OFICIAL ==================== -->
+  <aside id="sidebar-main" class="fixed md:static inset-y-0 left-0 z-50 w-64 bg-[#022C22] text-white flex flex-col justify-between shrink-0 select-none border-r border-[#064E3B] transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out h-full">
+    <div>
+      <!-- LOGO CORPORATIVO OFICIAL ISEM -->
+      <div class="p-5 border-b border-[#064E3B] bg-[#01221a] flex flex-col items-center justify-center relative">
+        <button onclick="toggleSidebarMobile()" class="md:hidden absolute right-3 top-3 text-emerald-300 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+
+        <div class="flex items-center justify-center gap-3 w-full">
+          <div class="w-12 h-12 rounded-2xl bg-white p-1.5 flex items-center justify-center shadow-lg border-2 border-isem-500 shrink-0">
+            <svg viewBox="0 0 100 100" class="w-full h-full text-isem-500 fill-current">
+              <path d="M50 5 C25 5 5 25 5 50 C5 75 25 95 50 95 C75 95 95 75 95 50 C95 25 75 5 50 5 Z M50 15 C60 15 70 20 77 28 C65 25 55 32 50 40 C45 32 35 25 23 28 C30 20 40 15 50 15 Z M20 50 C20 40 25 32 32 28 C42 35 48 45 50 55 C48 65 42 75 32 82 C25 78 20 70 20 50 Z M50 85 C40 85 30 80 23 72 C35 75 45 68 50 60 C55 68 65 75 77 72 C70 80 60 85 50 85 Z M80 50 C80 70 75 78 68 82 C58 75 52 65 50 55 C52 45 58 35 68 28 C75 32 80 40 80 50 Z"/>
+              <circle cx="50" cy="50" r="12" class="fill-black"/>
+              <path d="M45 42 L55 50 L45 58 Z" class="fill-white"/>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-2xl font-black tracking-tighter text-isem-500 leading-none">ISEM</span>
+            <span class="text-[8px] font-black uppercase text-white tracking-widest bg-black px-1.5 py-0.5 rounded mt-1 border border-emerald-800 text-center">
+              Seguridad Minera
+            </span>
+          </div>
+        </div>
+        <p class="text-[9px] font-extrabold text-emerald-300 uppercase tracking-widest mt-2 text-center">CRM B2B Capacitación</p>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="p-4 space-y-6 overflow-y-auto max-h-[calc(100vh-170px)]">
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-emerald-400/70 mb-2 px-3">Principal</p>
+          <button onclick="nav('dashboard')" id="nav-dashboard" class="nav-btn active w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-white bg-isem-500 shadow-md shadow-isem-500/20">
+            <div class="flex items-center gap-3">
+              <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+              <span>Dashboard</span>
+            </div>
+          </button>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-emerald-400/70 mb-2 px-3">Gestión Comercial</p>
+          <div class="space-y-1">
+            <button onclick="nav('clientes')" id="nav-clientes" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-emerald-100 hover:text-white hover:bg-emerald-800/40">
+              <div class="flex items-center gap-3">
+                <i data-lucide="building-2" class="w-4 h-4"></i>
+                <span>Clientes</span>
+              </div>
+              <span id="badge-count-clientes" class="bg-emerald-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+            </button>
+            <button onclick="nav('oportunidades')" id="nav-oportunidades" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-emerald-100 hover:text-white hover:bg-emerald-800/40">
+              <div class="flex items-center gap-3">
+                <i data-lucide="target" class="w-4 h-4"></i>
+                <span>Oportunidades</span>
+              </div>
+              <span id="badge-count-opps" class="bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+            </button>
+            <button onclick="nav('renovaciones')" id="nav-renovaciones" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-emerald-100 hover:text-white hover:bg-emerald-800/40">
+              <div class="flex items-center gap-3">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                <span>Renovaciones</span>
+              </div>
+              <span id="badge-count-renovaciones" class="bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-emerald-400/70 mb-2 px-3">Reportes & Analítica</p>
+          <div class="space-y-1">
+            <button onclick="nav('reportes')" id="nav-reportes" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-emerald-100 hover:text-white hover:bg-emerald-800/40">
+              <div class="flex items-center gap-3">
+                <i data-lucide="file-text" class="w-4 h-4"></i>
+                <span>Reportes</span>
+              </div>
+              <span class="bg-emerald-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-emerald-400/70 mb-2 px-3">Administración & Script</p>
+          <div class="space-y-1">
+            <button onclick="nav('historial')" id="nav-historial" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-emerald-200/80 hover:text-white hover:bg-emerald-800/40">
+              <i data-lucide="history" class="w-4 h-4"></i>
+              <span>Auditoría Temporal</span>
+            </button>
+            <button onclick="cargarDatosCompletos()" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-emerald-200/80 hover:text-white hover:bg-emerald-800/40">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+              <span>Conexión Google Sheets</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="p-4 border-t border-[#064E3B] text-[11px] text-emerald-300/70 flex items-center justify-between shrink-0 bg-[#01221a]">
+      <span>Instituto de Seguridad Minera</span>
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN CONTAINER RESPONSIVO ==================== -->
+  <main class="flex-1 flex flex-col min-h-screen md:h-screen overflow-hidden bg-[#F4F6F8] w-full">
+    
+    <!-- TOP BAR SUPERIOR -->
+    <header class="min-h-16 md:h-20 border-b border-slate-200 flex flex-wrap items-center justify-between px-4 md:px-8 py-3 bg-white shadow-sm z-30 gap-3">
+      
+      <!-- BOTÓN HAMBURGUESA Y TÍTULO -->
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebarMobile()" class="md:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <div>
+          <h2 id="page-title" class="text-base md:text-lg font-extrabold text-slate-900 tracking-tight leading-tight">CRM B2B ISEM</h2>
+          <p id="page-subtitle" class="hidden sm:block text-xs text-slate-500">Instituto de Seguridad Minera - Gestión Comercial</p>
+        </div>
+      </div>
+
+      <!-- BUSCADOR E ICONOS -->
+      <div class="flex items-center gap-2 sm:gap-4 flex-1 justify-end">
+        <div class="relative w-full max-w-[200px] sm:max-w-xs md:w-96">
+          <div class="relative">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+            <input type="text" id="global-search" oninput="ejecutarBusquedaGlobal()" onfocus="ejecutarBusquedaGlobal()" placeholder="Buscar empresa, facilitador..." class="w-full bg-slate-100 border border-slate-300 rounded-full pl-9 pr-7 py-1.5 md:py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-isem-500 focus:bg-white transition-all shadow-inner">
+            <button id="btn-clear-search" onclick="limpiarBusquedaGlobal()" class="hidden absolute right-2.5 top-2 text-slate-400 hover:text-slate-600">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+
+          <div id="search-results-dropdown" class="hidden absolute left-0 right-0 top-11 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden z-50 max-h-[80vh] md:max-h-[480px] overflow-y-auto divide-y divide-slate-100">
+            <div id="search-results-content" class="p-3 space-y-4">
+              <!-- Se puebla dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <div class="relative shrink-0">
+          <button id="btn-notif-bell" onclick="togglePanelNotificaciones()" class="relative p-2 md:p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center justify-center">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+            <span id="notif-badge-count" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full font-black flex items-center justify-center border-2 border-white animate-pulse">0</span>
+          </button>
+
+          <div id="notif-panel" class="hidden absolute right-0 top-11 w-72 sm:w-80 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden z-50">
+            <div class="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+              <span class="text-xs font-extrabold text-slate-900 flex items-center gap-2">
+                <i data-lucide="bell-ring" class="w-4 h-4 text-rose-500"></i>
+                Alertas Operativas
+              </span>
+              <span id="notif-panel-badge" class="bg-rose-100 text-rose-700 text-[10px] px-2 py-0.5 rounded-full font-bold">0 Pendientes</span>
+            </div>
+            <div id="notif-list" class="max-h-72 overflow-y-auto divide-y divide-slate-100 p-2 text-xs">
+              <!-- Se puebla con JS -->
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 border-l border-slate-200 pl-2 sm:pl-4 shrink-0">
+          <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-isem-500 text-white font-bold flex items-center justify-center text-xs shadow border border-emerald-400">
+            CR
+          </div>
+          <div class="hidden lg:block">
+            <p class="text-xs font-bold text-slate-900">Carlos Rojas</p>
+            <p class="text-[10px] text-slate-500">Comercial Senior</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT CONTAINER -->
+    <div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 md:space-y-8" id="main-scroll">
+
+      <!-- ================= SECCIÓN 1: DASHBOARD ================= -->
+      <section id="sec-dashboard" class="space-y-6 md:space-y-8">
+        
+        <!-- ROW 1: KPIS -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+          <div class="white-card p-3.5 md:p-4 rounded-2xl">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] md:text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Oportunidades</span>
+              <div class="p-1.5 rounded-lg bg-emerald-50 text-isem-500 border border-emerald-200">
+                <i data-lucide="target" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 md:mt-3">
+              <span id="kpi-opp-activas" class="text-xl md:text-2xl font-black text-slate-900">0</span>
+              <p class="text-[10px] text-emerald-600 font-bold mt-0.5">en pipeline</p>
+            </div>
+          </div>
+
+          <div class="white-card p-3.5 md:p-4 rounded-2xl">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] md:text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Clientes</span>
+              <div class="p-1.5 rounded-lg bg-blue-50 text-blue-600 border border-blue-200">
+                <i data-lucide="building" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 md:mt-3">
+              <span id="kpi-clientes-unicos" class="text-xl md:text-2xl font-black text-slate-900">0</span>
+              <p class="text-[10px] text-blue-600 font-bold mt-0.5">registrados</p>
+            </div>
+          </div>
+
+          <div class="white-card p-3.5 md:p-4 rounded-2xl">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] md:text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Cursos Activos</span>
+              <div class="p-1.5 rounded-lg bg-purple-50 text-purple-600 border border-purple-200">
+                <i data-lucide="book-open" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 md:mt-3">
+              <span id="kpi-cursos-ejecucion" class="text-xl md:text-2xl font-black text-slate-900">0</span>
+              <p class="text-[10px] text-purple-600 font-bold mt-0.5">en ejecución</p>
+            </div>
+          </div>
+
+          <div class="white-card p-3.5 md:p-4 rounded-2xl">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] md:text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Alertas</span>
+              <div class="p-1.5 rounded-lg bg-rose-50 text-rose-600 border border-rose-200">
+                <i data-lucide="alert-circle" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 md:mt-3">
+              <span id="kpi-alertas-criticas" class="text-xl md:text-2xl font-black text-rose-600">0</span>
+              <p class="text-[10px] text-rose-600 font-bold mt-0.5">estancadas > 10d</p>
+            </div>
+          </div>
+
+          <div class="white-card p-3.5 md:p-4 rounded-2xl">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] md:text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Confirmados</span>
+              <div class="p-1.5 rounded-lg bg-amber-50 text-amber-600 border border-amber-200">
+                <i data-lucide="clock" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 md:mt-3">
+              <span id="kpi-confirmados-sin-prog" class="text-xl md:text-2xl font-black text-slate-900">0</span>
+              <p class="text-[10px] text-amber-600 font-bold mt-0.5">pend. fecha</p>
+            </div>
+          </div>
+
+          <div class="white-card p-3.5 md:p-4 rounded-2xl">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] md:text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Ciclo Promedio</span>
+              <div class="p-1.5 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-200">
+                <i data-lucide="timer" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
+              </div>
+            </div>
+            <div class="mt-2 md:mt-3">
+              <span id="kpi-tiempo-ciclo" class="text-xl md:text-2xl font-black text-slate-900">0</span>
+              <p class="text-[10px] text-indigo-600 font-bold mt-0.5">días / ciclo</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 2: GRÁFICOS -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          <div class="white-card p-4 md:p-6 rounded-2xl">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <h3 class="text-xs md:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i data-lucide="filter" class="w-4 h-4 text-isem-500"></i>
+                Embudo Comercial (Pipeline)
+              </h3>
+              <span class="text-[10px] text-slate-500 font-mono font-semibold">Embudo</span>
+            </div>
+            <div class="relative h-56 sm:h-64 w-full">
+              <canvas id="chartPipeline"></canvas>
+            </div>
+          </div>
+
+          <div class="white-card p-4 md:p-6 rounded-2xl">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <h3 class="text-xs md:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i data-lucide="pie-chart" class="w-4 h-4 text-isem-500"></i>
+                Distribución por Tipo de Empresa (%)
+              </h3>
+              <span class="text-[10px] text-slate-500 font-semibold">% & Valores</span>
+            </div>
+            <div class="relative h-56 sm:h-64 w-full flex items-center justify-center">
+              <canvas id="chartTipoEmpresa"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 3: GRÁFICOS -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          <div class="white-card p-4 md:p-6 rounded-2xl">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <h3 class="text-xs md:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i data-lucide="award" class="w-4 h-4 text-isem-500"></i>
+                Cursos Más Solicitados
+              </h3>
+              <span class="text-[10px] text-slate-500 font-semibold">Oportunidades</span>
+            </div>
+            <div class="relative h-56 sm:h-64 w-full">
+              <canvas id="chartCursosTop"></canvas>
+            </div>
+          </div>
+
+          <div class="white-card p-4 md:p-6 rounded-2xl">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <h3 class="text-xs md:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i data-lucide="x-circle" class="w-4 h-4 text-rose-500"></i>
+                Motivos de Pérdida
+              </h3>
+              <span class="text-[10px] text-slate-500 font-semibold">Descarte</span>
+            </div>
+            <div class="relative h-56 sm:h-64 w-full">
+              <canvas id="chartMotivosPerdida"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 4: TABLAS DE CONTROL -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          <div class="white-card rounded-2xl overflow-hidden">
+            <div class="p-4 md:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+              <h3 class="text-xs md:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-500"></i>
+                Oportunidades Críticas
+              </h3>
+              <button onclick="nav('oportunidades')" class="text-xs text-isem-600 hover:underline font-bold">Ver todas →</button>
+            </div>
+            <div class="overflow-x-auto w-full">
+              <table class="w-full text-left text-xs text-slate-700 min-w-[500px]">
+                <thead class="bg-slate-100 text-slate-600 uppercase font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="px-4 py-3">ID Oportunidad</th>
+                    <th class="px-4 py-3">Empresa Cliente</th>
+                    <th class="px-4 py-3">Estado</th>
+                    <th class="px-4 py-3">Días Estancado</th>
+                  </tr>
+                </thead>
+                <tbody id="tb-dashboard-estancadas" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="white-card rounded-2xl overflow-hidden">
+            <div class="p-4 md:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+              <h3 class="text-xs md:text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <i data-lucide="calendar-off" class="w-4 h-4 text-amber-500"></i>
+                Confirmados sin Programación
+              </h3>
+              <button onclick="nav('oportunidades')" class="text-xs text-isem-600 hover:underline font-bold">Ver todas →</button>
+            </div>
+            <div class="overflow-x-auto w-full">
+              <table class="w-full text-left text-xs text-slate-700 min-w-[500px]">
+                <thead class="bg-slate-100 text-slate-600 uppercase font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="px-4 py-3">ID Oportunidad</th>
+                    <th class="px-4 py-3">Empresa</th>
+                    <th class="px-4 py-3">Curso ISEM</th>
+                    <th class="px-4 py-3">Responsable</th>
+                  </tr>
+                </thead>
+                <tbody id="tb-dashboard-confirmados" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= SECCIÓN 2: CLIENTES ================= -->
+      <section id="sec-clientes" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h3 class="text-base md:text-lg font-bold text-slate-900">Clientes & Ecosistema Minero</h3>
+            <p class="text-xs text-slate-500">Mapeo topológico de Titulares Mineros y Contratistas</p>
+          </div>
+          <button onclick="abrirModalCliente()" class="w-full sm:w-auto bg-isem-500 hover:bg-isem-600 text-white font-bold text-xs px-6 py-3.5 rounded-2xl shadow-lg shadow-isem-500/30 transition-all flex items-center justify-center gap-2">
+            <span>Registrar Nuevo Cliente</span>
+          </button>
+        </div>
+
+        <div class="white-card rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-left text-xs text-slate-700 min-w-[750px]">
+              <thead class="bg-slate-100 text-slate-600 uppercase font-bold border-b border-slate-200">
+                <tr>
+                  <th class="px-4 py-3.5">ID</th>
+                  <th class="px-4 py-3.5">Empresa</th>
+                  <th class="px-4 py-3.5">Tipo Empresa</th>
+                  <th class="px-4 py-3.5">Unidad Minera</th>
+                  <th class="px-4 py-3.5">Compañía Minera</th>
+                  <th class="px-4 py-3.5">Responsable</th>
+                  <th class="px-4 py-3.5">Contacto Principal</th>
+                  <th class="px-4 py-3.5">Correo / Teléfono</th>
+                  <th class="px-4 py-3.5 text-center">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tb-clientes" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SECCIÓN 3: OPORTUNIDADES (CON COLUMNA DE FACILITADOR) ================= -->
+      <section id="sec-oportunidades" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h3 class="text-base md:text-lg font-bold text-slate-900">Oportunidades Comerciales</h3>
+            <p class="text-xs text-slate-500">Seguimiento de propuestas, etapas del embudo y asignaciones de facilitadores</p>
+          </div>
+          <button onclick="abrirModalOportunidad()" class="w-full sm:w-auto bg-isem-500 hover:bg-isem-600 text-white font-bold text-xs px-6 py-3.5 rounded-2xl shadow-lg shadow-isem-500/30 transition-all flex items-center justify-center gap-2">
+            <span>Nueva Oportunidad</span>
+          </button>
+        </div>
+
+        <div class="white-card rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-left text-xs text-slate-700 min-w-[850px]">
+              <thead class="bg-slate-100 text-slate-600 uppercase font-bold border-b border-slate-200">
+                <tr>
+                  <th class="px-4 py-3.5">ID</th>
+                  <th class="px-4 py-3.5">Empresa / Unidad</th>
+                  <th class="px-4 py-3.5">Curso ISEM</th>
+                  <th class="px-4 py-3.5">Responsable</th>
+                  <th class="px-4 py-3.5">Facilitador</th>
+                  <th class="px-4 py-3.5">Estado Contrato</th>
+                  <th class="px-4 py-3.5 text-center">Días Estancado / Sin Contacto</th>
+                  <th class="px-4 py-3.5 text-center">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tb-oportunidades" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SECCIÓN 4: RENOVACIONES ================= -->
+      <section id="sec-renovaciones" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h3 class="text-base md:text-lg font-bold text-slate-900">Renovaciones de Servicios</h3>
+            <p class="text-xs text-slate-500">Control de vencimientos y recurrencia de capacitaciones</p>
+          </div>
+          <button onclick="abrirModalRenovacion()" class="w-full sm:w-auto bg-isem-500 hover:bg-isem-600 text-white font-bold text-xs px-6 py-3.5 rounded-2xl shadow-lg shadow-isem-500/30 transition-all flex items-center justify-center gap-2">
+            <span>Programar Renovación</span>
+          </button>
+        </div>
+
+        <div class="white-card rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-left text-xs text-slate-700 min-w-[650px]">
+              <thead class="bg-slate-100 text-slate-600 uppercase font-bold border-b border-slate-200">
+                <tr>
+                  <th class="px-4 py-3.5">ID Renovación</th>
+                  <th class="px-4 py-3.5">Empresa</th>
+                  <th class="px-4 py-3.5">Curso ISEM</th>
+                  <th class="px-4 py-3.5">Fecha Estimada</th>
+                  <th class="px-4 py-3.5">Estado Seguimiento</th>
+                  <th class="px-4 py-3.5 text-center">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tb-renovaciones" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SECCIÓN 5: MÓDULO DE REPORTES GERENCIALES ================= -->
+      <section id="sec-reportes" class="space-y-6 hidden">
+        
+        <!-- BARRA SUPERIOR DE ACCIONES DEL REPORTE (NO SALE EN PDF) -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm no-print">
+          <div>
+            <h3 class="text-base md:text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="file-text" class="w-5 h-5 text-isem-500"></i>
+              Módulo de Reportes Gerenciales Dinámicos
+            </h3>
+            <p class="text-xs text-slate-500">Generación automática de conclusiones operativas y logística de facilitadores</p>
+          </div>
+          <div class="flex items-center gap-3 w-full sm:w-auto">
+            <button onclick="generarReporteDinamico()" class="flex-1 sm:flex-initial bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 text-xs">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              Actualizar Análisis
+            </button>
+            <button onclick="window.print()" class="flex-1 sm:flex-initial bg-isem-500 hover:bg-isem-600 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-isem-500/30 transition flex items-center justify-center gap-2 text-xs">
+              <i data-lucide="printer" class="w-4 h-4"></i>
+              Descargar Reporte PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- DOCUMENTO FORMAL DEL REPORTE IMPRESO Y DIGITAL -->
+        <div class="white-card p-6 md:p-10 rounded-2xl max-w-4xl mx-auto space-y-8 shadow-xl">
+          
+          <!-- ENCABEZADO CENTRADO CON LOGO OFICIAL REDIMENSIONADO Y TÍTULOS H1 Y H2 -->
+          <div class="text-center space-y-2 border-b-2 border-slate-200 pb-6">
+            <div class="flex justify-center mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-white p-1 flex items-center justify-center border-2 border-isem-500 shadow">
+                  <svg viewBox="0 0 100 100" class="w-full h-full text-isem-500 fill-current">
+                    <path d="M50 5 C25 5 5 25 5 50 C5 75 25 95 50 95 C75 95 95 75 95 50 C95 25 75 5 50 5 Z M50 15 C60 15 70 20 77 28 C65 25 55 32 50 40 C45 32 35 25 23 28 C30 20 40 15 50 15 Z M20 50 C20 40 25 32 32 28 C42 35 48 45 50 55 C48 65 42 75 32 82 C25 78 20 70 20 50 Z M50 85 C40 85 30 80 23 72 C35 75 45 68 50 60 C55 68 65 75 77 72 C70 80 60 85 50 85 Z M80 50 C80 70 75 78 68 82 C58 75 52 65 50 55 C52 45 58 35 68 28 C75 32 80 40 80 50 Z"/>
+                    <circle cx="50" cy="50" r="12" class="fill-black"/>
+                    <path d="M45 42 L55 50 L45 58 Z" class="fill-white"/>
+                  </svg>
+                </div>
+                <span class="text-3xl font-black tracking-tighter text-isem-500">ISEM</span>
+              </div>
+            </div>
+            <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase">INSTITUTO DE SEGURIDAD MINERA</h1>
+            <h2 class="text-sm md:text-base font-extrabold text-isem-600 uppercase tracking-widest">Informe Gerencial Operativo</h2>
+            <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500 font-mono pt-1">
+              <span>Fecha de Emisión: <strong id="rep-fecha-emision">30/07/2026</strong></span>
+              <span>•</span>
+              <span>Emitido por: <strong>Carlos Rojas</strong></span>
+            </div>
+          </div>
+
+          <!-- RESUMEN EJECUTIVO EN BLOQUE VERDE ISEM -->
+          <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-200">
+            <h4 class="text-xs font-black uppercase tracking-wider text-isem-700 mb-1 flex items-center gap-2">
+              <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+              Resumen Ejecutivo de Gestión
+            </h4>
+            <p class="text-xs text-slate-700 leading-relaxed">
+              El presente informe recopila la evaluación dinámica del pipeline comercial de capacitación minera del ISEM. Se analizan automáticamente los cuellos de botella en negociación, las solicitudes pendientes de programación y el programa de renovaciones de contratos para el mantenimiento de estándares SSOMA.
+            </p>
+          </div>
+
+          <!-- SECCIÓN 1: CUELLOS DE BOTELLA -->
+          <div class="space-y-4">
+            <div class="border-b border-slate-200 pb-2">
+              <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                Sección 1: Diagnóstico de Cuellos de Botella en Pipeline
+              </h3>
+              <p class="text-[11px] text-slate-500">Alertas automáticas según días de estancamiento por etapa de negociación</p>
+            </div>
+            <div id="rep-sec-botellas" class="space-y-3">
+              <!-- Se puebla con JS mediante reglas if/else -->
+            </div>
+          </div>
+
+          <!-- SECCIÓN 2: LOGÍSTICA DE FACILITADORES MINIMALISTA -->
+          <div class="space-y-4">
+            <div class="border-b border-slate-200 pb-2">
+              <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                Sección 2: Logística de Facilitadores
+              </h3>
+              <p class="text-[11px] text-slate-500">Alertas exclusivas de solicitudes en estado 'Confirmado' pendientes de programación</p>
+            </div>
+            <div id="rep-sec-facilitadores" class="space-y-3">
+              <!-- Se puebla con JS filtrando exclusivamente Estado_Contrato === "Confirmado" -->
+            </div>
+          </div>
+
+          <!-- SECCIÓN 3: PRÓXIMAS RENOVACIONES -->
+          <div class="space-y-4">
+            <div class="border-b border-slate-200 pb-2">
+              <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-isem-500"></span>
+                Sección 3: Proyección de Renovaciones (Próximos 12 Meses)
+              </h3>
+              <p class="text-[11px] text-slate-500">Calendario de vencimiento y recertificación de programas mineros</p>
+            </div>
+            <div id="rep-sec-renovaciones" class="space-y-3">
+              <!-- Se puebla con JS -->
+            </div>
+          </div>
+
+          <!-- PIE DE PAGINA DEL REPORTE -->
+          <div class="pt-6 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+            <span>CRM B2B ISEM - Instituto de Seguridad Minera</span>
+            <span>Documento autogenerado por reglas de negocio del CRM</span>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= SECCIÓN 6: AUDITORÍA TEMPORAL ================= -->
+      <section id="sec-historial" class="space-y-6 hidden">
+        <div>
+          <h3 class="text-base md:text-lg font-bold text-slate-900">Auditoría Temporal de Estados</h3>
+          <p class="text-xs text-slate-500">Registro histórico de transiciones de oportunidades en el pipeline</p>
+        </div>
+
+        <div class="white-card rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-left text-xs text-slate-700 min-w-[600px]">
+              <thead class="bg-slate-100 text-slate-600 uppercase font-bold border-b border-slate-200">
+                <tr>
+                  <th class="px-4 py-3.5">ID Oportunidad</th>
+                  <th class="px-4 py-3.5">Empresa</th>
+                  <th class="px-4 py-3.5">Estado Anterior</th>
+                  <th class="px-4 py-3.5">Estado Nuevo</th>
+                  <th class="px-4 py-3.5">Fecha Cambio</th>
+                  <th class="px-4 py-3.5">Responsable</th>
+                </tr>
+              </thead>
+              <tbody id="tb-historial" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==================== MODALES Y FORMULARIOS ==================== -->
+
+  <!-- 1. MODAL REGISTRAR CLIENTE -->
+  <div id="modal-cliente" class="fixed inset-0 modal-backdrop flex items-center justify-center p-3 sm:p-4 z-50 hidden overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl text-slate-800 my-auto">
+      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <h4 id="modal-cliente-titulo" class="text-xs sm:text-sm font-extrabold text-slate-900">Registrar Nuevo Cliente B2B</h4>
+        <button onclick="cerrarModal('modal-cliente')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-cliente" onsubmit="guardarCliente(event)" class="p-4 sm:p-6 space-y-4 text-xs">
+        <input type="hidden" id="cli-id">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Nombre Empresa *</label>
+            <input type="text" id="cli-empresa" placeholder="Ej: San Martín Contratistas" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Tipo de Empresa</label>
+            <select id="cli-tipo" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Unidad Minera</label>
+            <select id="cli-unidad" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Compañía Minera</label>
+            <select id="cli-compania" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Responsable Comercial</label>
+            <select id="cli-responsable" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Contacto Principal</label>
+            <input type="text" id="cli-contacto" placeholder="Nombre completo" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Cargo Contacto</label>
+            <input type="text" id="cli-cargo" placeholder="Ej: Gerente SSOMA" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Teléfono</label>
+            <input type="text" id="cli-telefono" placeholder="987654321" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block font-bold text-slate-700 mb-1">Correo Corporativo</label>
+            <input type="email" id="cli-correo" placeholder="contacto@empresa.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none">
+          </div>
+        </div>
+        <div class="pt-4 border-t border-slate-200 flex justify-end gap-3">
+          <button type="button" onclick="cerrarModal('modal-cliente')" class="px-4 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">Cancelar</button>
+          <button type="submit" id="btn-save-cliente" class="px-5 py-2.5 rounded-xl font-bold text-white bg-isem-500 hover:bg-isem-600 shadow-md shadow-isem-500/30">Registrar Cliente</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. MODAL REGISTRAR NUEVA OPORTUNIDAD -->
+  <div id="modal-oportunidad" class="fixed inset-0 modal-backdrop flex items-center justify-center p-3 sm:p-4 z-50 hidden overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl text-slate-800 my-auto">
+      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <h4 class="text-xs sm:text-sm font-extrabold text-slate-900">Registrar Nueva Oportunidad</h4>
+        <button onclick="cerrarModal('modal-oportunidad')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-oportunidad" onsubmit="guardarOportunidad(event)" class="p-4 sm:p-6 space-y-4 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Empresa Cliente *</label>
+            <select id="opp-empresa" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Unidad Minera</label>
+            <select id="opp-unidad" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Curso ISEM *</label>
+            <select id="opp-curso" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Responsable Comercial</label>
+            <select id="opp-responsable" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Facilitador</label>
+            <select id="opp-facilitador" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Modalidad</label>
+            <select id="opp-modalidad" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Estado Inicial</label>
+            <select id="opp-estado" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Fuente del Lead</label>
+            <select id="opp-fuente" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-slate-200 flex justify-end gap-3">
+          <button type="button" onclick="cerrarModal('modal-oportunidad')" class="px-4 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">Cancelar</button>
+          <button type="submit" id="btn-save-opp" class="px-5 py-2.5 rounded-xl font-bold text-white bg-isem-500 hover:bg-isem-600 shadow-md shadow-isem-500/30">Guardar Oportunidad</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. MODAL ACTUALIZAR ESTADO Y DATOS DE OPORTUNIDAD (EDICIÓN COMPLETA SOLICITADA) -->
+  <div id="modal-estado-opp" class="fixed inset-0 modal-backdrop flex items-center justify-center p-3 sm:p-4 z-50 hidden overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl text-slate-800 my-auto">
+      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <h4 class="text-xs sm:text-sm font-extrabold text-slate-900">Actualizar Estado y Datos de Oportunidad</h4>
+        <button onclick="cerrarModal('modal-estado-opp')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-estado-opp" onsubmit="guardarEstadoOportunidad(event)" class="p-4 sm:p-6 space-y-4 text-xs">
+        <input type="hidden" id="estado-opp-id">
+        <div>
+          <p class="text-slate-500 mb-1">Oportunidad seleccionada:</p>
+          <p id="lbl-opp-info" class="font-bold text-slate-900 text-xs sm:text-sm mb-3 bg-slate-100 p-2.5 rounded-xl border border-slate-200"></p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Estado Contrato *</label>
+            <select id="opp-nuevo-estado" required onchange="toggleMotivoPerdida(this.value)" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Curso ISEM *</label>
+            <select id="opp-nuevo-curso" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Modalidad *</label>
+            <select id="opp-nueva-modalidad" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Responsable Comercial *</label>
+            <select id="opp-nuevo-responsable" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block font-bold text-slate-700 mb-1">Facilitador Asignado *</label>
+            <select id="opp-nuevo-facilitador" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+          </div>
+        </div>
+
+        <div id="div-motivo-perdida" class="hidden">
+          <label class="block font-bold text-slate-700 mb-1">Motivo de Pérdida</label>
+          <select id="opp-motivo-perdida" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+        </div>
+
+        <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-800 text-[11px]">
+          ℹ️ Se actualizarán todos los campos en la hoja y se guardará la transición en <strong>Historial_Tiempos</strong>.
+        </div>
+        <div class="pt-4 border-t border-slate-200 flex justify-end gap-3">
+          <button type="button" onclick="cerrarModal('modal-estado-opp')" class="px-4 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">Cancelar</button>
+          <button type="submit" id="btn-update-estado" class="px-5 py-2.5 rounded-xl font-bold text-white bg-isem-500 hover:bg-isem-600 shadow-md shadow-isem-500/30">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. MODAL PROGRAMAR RENOVACIÓN -->
+  <div id="modal-renovacion" class="fixed inset-0 modal-backdrop flex items-center justify-center p-3 sm:p-4 z-50 hidden overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl text-slate-800 my-auto">
+      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <h4 class="text-xs sm:text-sm font-extrabold text-slate-900">Programar Renovación</h4>
+        <button onclick="cerrarModal('modal-renovacion')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-renovacion" onsubmit="guardarRenovacion(event)" class="p-4 sm:p-6 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Empresa Cliente *</label>
+          <select id="ren-empresa" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Curso ISEM *</label>
+          <select id="ren-curso" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Fecha Estimada Renovación *</label>
+          <input type="date" id="ren-fecha" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Estado Seguimiento</label>
+          <select id="ren-estado" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+        </div>
+        <div class="pt-4 border-t border-slate-200 flex justify-end gap-3">
+          <button type="button" onclick="cerrarModal('modal-renovacion')" class="px-4 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">Cancelar</button>
+          <button type="submit" id="btn-save-renovacion" class="px-5 py-2.5 rounded-xl font-bold text-white bg-isem-500 hover:bg-isem-600 shadow-md shadow-isem-500/30">Guardar Renovación</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. MODAL CAMBIAR ESTADO RENOVACIÓN -->
+  <div id="modal-estado-ren" class="fixed inset-0 modal-backdrop flex items-center justify-center p-3 sm:p-4 z-50 hidden overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl text-slate-800 my-auto">
+      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <h4 class="text-xs sm:text-sm font-extrabold text-slate-900">Cambiar Estado de Renovación</h4>
+        <button onclick="cerrarModal('modal-estado-ren')" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="form-estado-ren" onsubmit="guardarEstadoRenovacion(event)" class="p-4 sm:p-6 space-y-4 text-xs">
+        <input type="hidden" id="ren-estado-id">
+        <div>
+          <p class="text-slate-500 mb-1">Renovación:</p>
+          <p id="lbl-ren-info" class="font-bold text-slate-900 text-xs sm:text-sm mb-3"></p>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nuevo Estado *</label>
+          <select id="ren-nuevo-estado" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 focus:border-isem-500 focus:outline-none"></select>
+        </div>
+        <div class="pt-4 border-t border-slate-200 flex justify-end gap-3">
+          <button type="button" onclick="cerrarModal('modal-estado-ren')" class="px-4 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">Cancelar</button>
+          <button type="submit" id="btn-update-ren" class="px-5 py-2.5 rounded-xl font-bold text-white bg-isem-500 hover:bg-isem-600 shadow-md shadow-isem-500/30">Guardar Cambio</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 hidden transform transition-all duration-300 translate-y-4">
+    <div class="flex items-center gap-3 bg-white border border-slate-200 px-4 sm:px-5 py-3 sm:py-3.5 rounded-2xl shadow-2xl text-slate-800">
+      <div id="toast-icon" class="text-isem-500"><i data-lucide="check-circle-2" class="w-5 h-5"></i></div>
+      <p id="toast-message" class="text-xs font-bold text-slate-900">Operación exitosa.</p>
+    </div>
+  </div>
+
+  <!-- ==================== FRONTEND JS ==================== -->
+  <script>
+    const MOCK_DATA = {
+      configuracion: {
+        "Cursos_ISEM": ["Entrenando al Entrenador", "Rescate Minero 2026", "Trabajos en Altura", "IPERC Continuo", "LOTO Bloqueo", "NFPA 70E", "Higiene Ocupacional Minera", "Seguridad en Excavaciones"],
+        "Modalidad": ["Presencial", "Virtual En Vivo", "E-Learning"],
+        "Responsables_Comerciales": ["Carlos Mendoza", "Ana Lucía Torres", "Roberto Gómez", "María Salazar", "Samuel Quito", "Fiori Ramos"],
+        "Facilitadores": ["Roberto Gómez", "María Paredes", "Juan Pérez", "Carlos Mendoza", "Fiori Ramos"],
+        "Estados_Contrato": ["Prospecto", "En Negociación", "Propuesta", "En Ejecución", "Ganado", "Perdido", "Confirmado", "Cerrado - Ganado", "Cerrado - Perdido"],
+        "Fuente_Lead": ["Web ISEM", "Feria Minera", "Cliente Recurrente"],
+        "Tipo_Empresa": ["Compañía Minera", "Contratista", "Subcontratista", "Conexa / Proveedor Industrial"],
+        "Estado_Seguimiento": ["Nuevo", "Contactado", "En Proceso", "Renovado"],
+        "Motivos_Perdida": ["Proveedor competidor", "Sin presupuesto", "No respondió seguimiento", "Cambio de prioridad operativa", "Falta de disponibilidad de fechas"],
+        "Unidad_Minera": ["Cuajone", "Toquepala", "Cerro Verde", "Antamina", "Las Bambas", "Poderosa", "Constancia", "Yanacancha", "Orcopampa"],
+        "Compañía_Minera": ["Southern Perú", "Sociedad Minera Cerro Verde", "Compañía Minera Antamina", "Compañía Minera Poderosa", "Nexa Resources", "Minera Las Bambas"]
+      },
+      clientes: [
+        { "ID Cliente": "CLI-001", "Empresa": "Sociedad Minera Cerro Verde", "Tipo_Empresa": "Compañía Minera", "Unidad_Minera": "Cerro Verde", "Compañía_Minera": "Sociedad Minera Cerro Verde", "Responsable_Comercial": "Carlos Mendoza", "Contacto_Principal": "Luis Salas", "Cargo": "Superintendente Seguridad", "Teléfono": "+51 987654321", "Correo_Corporativo": "lsalas@cerroverde.pe" },
+        { "ID Cliente": "CLI-002", "Empresa": "Southern Perú Copper Corp", "Tipo_Empresa": "Compañía Minera", "Unidad_Minera": "Cuajone", "Compañía_Minera": "Southern Perú", "Responsable_Comercial": "Ana Lucía Torres", "Contacto_Principal": "María Salazar", "Cargo": "Jefe Capacitación", "Teléfono": "+51 912345678", "Correo_Corporativo": "msalazar@southernperu.com.pe" },
+        { "ID Cliente": "CLI-003", "Empresa": "Compañía Minera Antamina", "Tipo_Empresa": "Compañía Minera", "Unidad_Minera": "Antamina", "Compañía_Minera": "Compañía Minera Antamina", "Responsable_Comercial": "Carlos Mendoza", "Contacto_Principal": "Ricardo Alvarado", "Cargo": "Superintendente SSOMA", "Teléfono": "+51 977112233", "Correo_Corporativo": "ralvarado@antamina.com" },
+        { "ID Cliente": "CLI-004", "Empresa": "San Martín Contratistas Generales", "Tipo_Empresa": "Contratista", "Unidad_Minera": "Las Bambas", "Compañía_Minera": "MMG Las Bambas", "Responsable_Comercial": "Roberto Gómez", "Contacto_Principal": "Rosa Silva", "Cargo": "Jefe RRHH", "Teléfono": "+51 965432187", "Correo_Corporativo": "rsilva@sanmartin.pe" },
+        { "ID Cliente": "CLI-005", "Empresa": "AESA Infraestructura y Minería", "Tipo_Empresa": "Subcontratista", "Unidad_Minera": "Poderosa", "Compañía_Minera": "Compañía Minera Poderosa", "Responsable_Comercial": "Samuel Quito", "Contacto_Principal": "Pedro Pablo", "Cargo": "Jefe Seguridad", "Teléfono": "+51 911223344", "Correo_Corporativo": "ppablo@aesa.pe" }
+      ],
+      oportunidades: [
+        { "ID Oportunidad": "OP-2026-005", "Empresa": "Sociedad Minera Cerro Verde", "Unidad_Minera": "Cerro Verde", "Facilitador": "Juan Pérez", "Cursos_ISEM": "Higiene Ocupacional Minera", "Modalidad": "Presencial", "Responsable_Comercial": "Fiori Ramos", "Estado_Contrato": "Cerrado - Ganado", "Fuente_Lead": "Cliente Recurrente", "Fecha_Creacion": "2026-07-01", "Fecha_Ultimo_Contacto": "2026-07-25", "Dias_Sin_Contacto": 0, "Ultima_Fecha_Cambio_Estado": "2026-07-20", "Dias_Estancado": 0, "Motivo_Perdida": "" },
+        { "ID Oportunidad": "OP-2026-011", "Empresa": "Nexa Resources", "Unidad_Minera": "Constancia", "Facilitador": "María Paredes", "Cursos_ISEM": "Higiene Ocupacional Minera", "Modalidad": "Presencial", "Responsable_Comercial": "Fiori Ramos", "Estado_Contrato": "Cerrado - Perdido", "Fuente_Lead": "Web ISEM", "Fecha_Creacion": "2026-07-10", "Fecha_Ultimo_Contacto": "2026-07-28", "Dias_Sin_Contacto": 0, "Ultima_Fecha_Cambio_Estado": "2026-07-15", "Dias_Estancado": 0, "Motivo_Perdida": "Sin presupuesto" },
+        { "ID Oportunidad": "OP-2026-017", "Empresa": "Nexa Resources", "Unidad_Minera": "Yanacancha", "Facilitador": "Roberto Gómez", "Cursos_ISEM": "Higiene Ocupacional Minera", "Modalidad": "Virtual En Vivo", "Responsable_Comercial": "Fiori Ramos", "Estado_Contrato": "Cerrado - Ganado", "Fuente_Lead": "Feria Minera", "Fecha_Creacion": "2026-07-05", "Fecha_Ultimo_Contacto": "2026-07-12", "Dias_Sin_Contacto": 0, "Ultima_Fecha_Cambio_Estado": "2026-07-12", "Dias_Estancado": 0, "Motivo_Perdida": "" },
+        { "ID Oportunidad": "OP-2026-021", "Empresa": "Minera Las Bambas", "Unidad_Minera": "Las Bambas", "Facilitador": "Juan Pérez", "Cursos_ISEM": "Seguridad en Excavaciones", "Modalidad": "Presencial", "Responsable_Comercial": "Fiori Ramos", "Estado_Contrato": "En Negociación", "Fuente_Lead": "Web ISEM", "Fecha_Creacion": "2026-07-08", "Fecha_Ultimo_Contacto": "2026-07-14", "Dias_Sin_Contacto": 0, "Ultima_Fecha_Cambio_Estado": "2026-07-14", "Dias_Estancado": 0, "Motivo_Perdida": "" },
+        { "ID Oportunidad": "OP-2026-023", "Empresa": "Nexa Resources", "Unidad_Minera": "Orcopampa", "Facilitador": "Carlos Mendoza", "Cursos_ISEM": "Higiene Ocupacional Minera", "Modalidad": "Presencial", "Responsable_Comercial": "Fiori Ramos", "Estado_Contrato": "En Ejecución", "Fuente_Lead": "Cliente Recurrente", "Fecha_Creacion": "2026-07-15", "Fecha_Ultimo_Contacto": "2026-07-28", "Dias_Sin_Contacto": 0, "Ultima_Fecha_Cambio_Estado": "2026-07-20", "Dias_Estancado": 0, "Motivo_Perdida": "" }
+      ],
+      renovaciones: [
+        { "ID Renovación": "REN-001", "Empresa": "Sociedad Minera Cerro Verde", "Cursos_ISEM": "Entrenando al Entrenador", "Fecha_Estimada_Renovacion": "2027-03-15", "Estado_Seguimiento": "Nuevo" },
+        { "ID Renovación": "REN-002", "Empresa": "Southern Perú Copper Corp", "Cursos_ISEM": "Rescate Minero 2026", "Fecha_Estimada_Renovacion": "2026-11-20", "Estado_Seguimiento": "En Proceso" }
+      ],
+      historial: [
+        { "ID Oportunidad": "OP-2026-005", "Empresa": "Sociedad Minera Cerro Verde", "Estado Anterior": "En Negociación", "Estado Nuevo": "Cerrado - Ganado", "Fecha Cambio": "2026-07-20", "Responsable Comercial": "Fiori Ramos" }
+      ]
+    };
+
+    let CRM_DATA = JSON.parse(JSON.stringify(MOCK_DATA));
+
+    if (typeof ChartDataLabels !== 'undefined') {
+      Chart.register(ChartDataLabels);
+    }
+
+    let seccionActiva = 'dashboard';
+    let chartPipelineInstance = null;
+    let chartTipoEmpresaInstance = null;
+    let chartCursosTopInstance = null;
+    let chartMotivosPerdidaInstance = null;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderizarTodo();
+      cargarDatosCompletos();
+
+      document.addEventListener('click', (e) => {
+        const searchContainer = document.getElementById('global-search').parentElement.parentElement;
+        const notifContainer = document.getElementById('btn-notif-bell').parentElement;
+        
+        if (!searchContainer.contains(e.target)) {
+          document.getElementById('search-results-dropdown').classList.add('hidden');
+        }
+        if (!notifContainer.contains(e.target)) {
+          document.getElementById('notif-panel').classList.add('hidden');
+        }
+      });
+    });
+
+    function toggleSidebarMobile() {
+      const sidebar = document.getElementById('sidebar-main');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      
+      sidebar.classList.toggle('-translate-x-full');
+      backdrop.classList.toggle('hidden');
+    }
+
+    function nav(seccion) {
+      seccionActiva = seccion;
+      document.querySelectorAll('section[id^="sec-"]').forEach(s => s.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-isem-500', 'text-white', 'shadow-md');
+        btn.classList.add('text-emerald-100');
+      });
+
+      document.getElementById(`sec-${seccion}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`nav-${seccion}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-emerald-100');
+        activeBtn.classList.add('bg-isem-500', 'text-white', 'shadow-md');
+      }
+
+      if (seccion === 'reportes') {
+        generarReporteDinamico();
+      }
+
+      const sidebar = document.getElementById('sidebar-main');
+      if (!sidebar.classList.contains('-translate-x-full') && window.innerWidth < 768) {
+        toggleSidebarMobile();
+      }
+
+      document.getElementById('main-scroll').scrollTop = 0;
+    }
+
+    function cargarDatosCompletos() {
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(res => {
+            if (res) {
+              const tieneClientes = res.clientes && res.clientes.length > 0;
+              const tieneOpps = res.oportunidades && res.oportunidades.length > 0;
+
+              if (tieneClientes || tieneOpps) {
+                CRM_DATA = res;
+                mostrarToast('Sincronizado con Google Sheets');
+              } else {
+                if (res.configuracion && Object.keys(res.configuracion).length > 0) {
+                  CRM_DATA.configuracion = { ...MOCK_DATA.configuracion, ...res.configuracion };
+                }
+              }
+              renderizarTodo();
+            }
+          })
+          .withFailureHandler(err => {
+            console.error(err);
+            renderizarTodo();
+          })
+          .obtenerDatos();
+      } else {
+        renderizarTodo();
+      }
+    }
+
+    function renderizarTodo() {
+      actualizarBadgesNav();
+      renderizarKPIs();
+      renderizarGraficos();
+      renderizarTablaEstancadas();
+      renderizarTablaConfirmados();
+      renderizarClientes();
+      renderizarOportunidades();
+      renderizarRenovaciones();
+      renderizarHistorial();
+      generarReporteDinamico();
+      poblarDesplegablesFormularios();
+      generarAlertasOperativas();
+    }
+
+    function actualizarBadgesNav() {
+      document.getElementById('badge-count-clientes').innerText = CRM_DATA.clientes.length;
+      document.getElementById('badge-count-opps').innerText = CRM_DATA.oportunidades.length;
+      document.getElementById('badge-count-renovaciones').innerText = CRM_DATA.renovaciones.length;
+    }
+
+    function generarReporteDinamico() {
+      const elFecha = document.getElementById('rep-fecha-emision');
+      if (elFecha) {
+        elFecha.innerText = new Date().toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      }
+      
+      generarSeccionBottlenecks();
+      generarSeccionFacilitadores();
+      generarSeccionRenovacionesReporte();
+
+      lucide.createIcons();
+    }
+
+    function generarSeccionBottlenecks() {
+      const container = document.getElementById('rep-sec-botellas');
+      if (!container) return;
+
+      const opps = CRM_DATA.oportunidades || [];
+      const abiertas = opps.filter(o => !String(o.Estado_Contrato).toLowerCase().includes('ganado') && !String(o.Estado_Contrato).toLowerCase().includes('perdido') && !String(o.Estado_Contrato).toLowerCase().includes('cerrado'));
+      
+      let html = '';
+      let contCriticas = 0;
+      let contModeradas = 0;
+
+      abiertas.forEach(o => {
+        const dias = parseInt(o.Dias_Estancado, 10) || 0;
+        if (dias > 15) {
+          contCriticas++;
+          html += `
+            <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-3">
+              <span class="text-base shrink-0">🔴</span>
+              <div>
+                <p class="font-extrabold text-rose-900 text-xs">Alerta Crítica: ${o.Empresa || 'Cliente'}</p>
+                <p class="text-xs text-rose-700 mt-0.5">Lleva <strong class="font-mono text-rose-900">${dias} días estancada</strong> en el estado <strong>"${o.Estado_Contrato}"</strong> (Curso: ${o.Cursos_ISEM || 'General'}, Responsable: ${o.Responsable_Comercial || 'N/A'}).</p>
+              </div>
+            </div>
+          `;
+        } else if (dias >= 10 && dias <= 15) {
+          contModeradas++;
+          html += `
+            <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3">
+              <span class="text-base shrink-0">🟠</span>
+              <div>
+                <p class="font-extrabold text-amber-900 text-xs">Alerta Moderada: ${o.Empresa || 'Cliente'}</p>
+                <p class="text-xs text-amber-700 mt-0.5">Lleva <strong class="font-mono text-amber-900">${dias} días estancada</strong> en el estado <strong>"${o.Estado_Contrato}"</strong> (Curso: ${o.Cursos_ISEM || 'General'}).</p>
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      if (contCriticas === 0 && contModeradas === 0) {
+        html = `
+          <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-3">
+            <span class="text-lg">🟢</span>
+            <span>No se detectaron cuellos de botella críticos (> 10 días) en las oportunidades activas del pipeline.</span>
+          </div>
+        `;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function generarSeccionFacilitadores() {
+      const container = document.getElementById('rep-sec-facilitadores');
+      if (!container) return;
+
+      const opps = CRM_DATA.oportunidades || [];
+      const confirmados = opps.filter(o => String(o.Estado_Contrato || '').trim().toLowerCase() === 'confirmado');
+
+      if (confirmados.length === 0) {
+        container.innerHTML = `
+          <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-3">
+            <span class="text-lg">🟢</span>
+            <span>No se detectaron solicitudes pendientes</span>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '<div class="space-y-2.5">';
+      confirmados.forEach(o => {
+        const fac = o.Facilitador || 'Facilitador no asignado';
+        const emp = o.Empresa || 'Empresa Cliente';
+        html += `
+          <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 flex items-center gap-3 text-xs">
+            <span class="text-base shrink-0">🟠</span>
+            <p class="font-bold text-amber-900">
+              <strong>${fac}</strong>: Pendiente de programación en <strong>${emp}</strong>
+            </p>
+          </div>
+        `;
+      });
+      html += '</div>';
+
+      container.innerHTML = html;
+    }
+
+    function generarSeccionRenovacionesReporte() {
+      const container = document.getElementById('rep-sec-renovaciones');
+      if (!container) return;
+
+      const rens = CRM_DATA.renovaciones || [];
+      const hoy = new Date();
+      const en12Meses = new Date();
+      en12Meses.setMonth(hoy.getMonth() + 12);
+
+      let html = '';
+      let count = 0;
+
+      rens.forEach(r => {
+        const fechaRen = r.Fecha_Estimada_Renovacion ? new Date(r.Fecha_Estimada_Renovacion) : null;
+        
+        if (!fechaRen || (fechaRen >= hoy && fechaRen <= en12Meses) || fechaRen < hoy) {
+          count++;
+          const fStr = r.Fecha_Estimada_Renovacion || 'Sin fecha asignada';
+          const estadoSeg = r.Estado_Seguimiento || 'Nuevo';
+
+          html += `
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg bg-emerald-100 text-isem-700 font-extrabold shrink-0">
+                  <i data-lucide="calendar" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <p class="font-extrabold text-slate-900 text-xs">${r.Empresa || 'Empresa Cliente'}</p>
+                  <p class="text-slate-500 text-[11px]">Programa: <strong>${r.Cursos_ISEM || 'Capacitación SSOMA'}</strong> • Vencimiento: <span class="font-mono font-bold text-slate-700">${fStr}</span></p>
+                </div>
+              </div>
+              <span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200 shrink-0">${estadoSeg}</span>
+            </div>
+          `;
+        }
+      });
+
+      if (count === 0) {
+        html = `
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 text-xs">
+            No se registran renovaciones de cursos programadas para los próximos 12 meses.
+          </div>
+        `;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function ejecutarBusquedaGlobal() {
+      const input = document.getElementById('global-search');
+      const query = input.value.trim().toLowerCase();
+      const dropdown = document.getElementById('search-results-dropdown');
+      const content = document.getElementById('search-results-content');
+      const btnClear = document.getElementById('btn-clear-search');
+
+      if (query.length > 0) btnClear.classList.remove('hidden');
+      else btnClear.classList.add('hidden');
+
+      if (seccionActiva === 'clientes') renderizarClientes(query);
+      else if (seccionActiva === 'oportunidades') renderizarOportunidades(query);
+      else if (seccionActiva === 'renovaciones') renderizarRenovaciones(query);
+
+      if (query.length === 0) {
+        dropdown.classList.add('hidden');
+        return;
+      }
+
+      const contactosMatch = CRM_DATA.clientes.filter(c => 
+        (c.Contacto_Principal && c.Contacto_Principal.toLowerCase().includes(query)) ||
+        (c.Cargo && c.Cargo.toLowerCase().includes(query)) ||
+        (c.Correo_Corporativo && c.Correo_Corporativo.toLowerCase().includes(query))
+      );
+
+      const comercialesMatch = CRM_DATA.clientes.concat(CRM_DATA.oportunidades).filter(x => 
+        x.Responsable_Comercial && x.Responsable_Comercial.toLowerCase().includes(query)
+      );
+      const comercialesUnicos = [...new Set(comercialesMatch.map(x => x.Responsable_Comercial))];
+
+      const facilitadoresMatch = CRM_DATA.oportunidades.filter(o => 
+        o.Facilitador && o.Facilitador.toLowerCase().includes(query)
+      );
+      const facilitadoresUnicos = [...new Set(facilitadoresMatch.map(o => o.Facilitador))];
+
+      const empresasMatch = CRM_DATA.clientes.filter(c => 
+        (c.Empresa && c.Empresa.toLowerCase().includes(query)) ||
+        (c.Compañía_Minera && c.Compañía_Minera.toLowerCase().includes(query)) ||
+        (c.Unidad_Minera && c.Unidad_Minera.toLowerCase().includes(query))
+      );
+
+      const oppsMatch = CRM_DATA.oportunidades.filter(o => 
+        (o["ID Oportunidad"] && o["ID Oportunidad"].toLowerCase().includes(query)) ||
+        (o.Cursos_ISEM && o.Cursos_ISEM.toLowerCase().includes(query)) ||
+        (o.Empresa && o.Empresa.toLowerCase().includes(query))
+      );
+
+      let html = '';
+
+      if (contactosMatch.length > 0) {
+        html += `<div><p class="text-[10px] font-black uppercase text-slate-500 mb-1 px-1">CONTACTOS (${contactosMatch.length})</p><div class="space-y-1">`;
+        contactosMatch.forEach(c => {
+          html += `
+            <div onclick="irACliente('${c["ID Cliente"]}')" class="p-2 rounded-xl hover:bg-emerald-50 cursor-pointer flex items-center justify-between">
+              <div>
+                <p class="text-xs font-bold text-slate-900">${resaltarCoincidencia(c.Contacto_Principal || 'Contacto', query)}</p>
+                <p class="text-[10px] text-slate-500">${c.Empresa}</p>
+              </div>
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">Contacto</span>
+            </div>
+          `;
+        });
+        html += `</div></div>`;
+      }
+
+      if (comercialesUnicos.length > 0) {
+        html += `<div><p class="text-[10px] font-black uppercase text-slate-500 mb-1 px-1">COMERCIALES (${comercialesUnicos.length})</p><div class="space-y-1">`;
+        comercialesUnicos.forEach(com => {
+          html += `
+            <div onclick="nav('oportunidades')" class="p-2 rounded-xl hover:bg-amber-50 cursor-pointer flex items-center justify-between">
+              <p class="text-xs font-bold text-slate-900">${resaltarCoincidencia(com, query)}</p>
+              <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold">Comercial</span>
+            </div>
+          `;
+        });
+        html += `</div></div>`;
+      }
+
+      if (facilitadoresUnicos.length > 0) {
+        html += `<div><p class="text-[10px] font-black uppercase text-slate-500 mb-1 px-1">FACILITADORES (${facilitadoresUnicos.length})</p><div class="space-y-1">`;
+        facilitadoresUnicos.forEach(fac => {
+          html += `
+            <div onclick="nav('oportunidades')" class="p-2 rounded-xl hover:bg-purple-50 cursor-pointer flex items-center justify-between">
+              <p class="text-xs font-bold text-slate-900">${resaltarCoincidencia(fac, query)}</p>
+              <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold">Facilitador</span>
+            </div>
+          `;
+        });
+        html += `</div></div>`;
+      }
+
+      if (empresasMatch.length > 0) {
+        html += `<div><p class="text-[10px] font-black uppercase text-slate-500 mb-1 px-1">EMPRESAS (${empresasMatch.length})</p><div class="space-y-1">`;
+        empresasMatch.forEach(c => {
+          html += `
+            <div onclick="irACliente('${c["ID Cliente"]}')" class="p-2 rounded-xl hover:bg-emerald-50 cursor-pointer flex items-center justify-between">
+              <div>
+                <p class="text-xs font-bold text-slate-900">${resaltarCoincidencia(c.Empresa, query)}</p>
+                <p class="text-[10px] text-slate-500">Unidad: ${resaltarCoincidencia(c.Unidad_Minera || 'N/A', query)}</p>
+              </div>
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">Empresa</span>
+            </div>
+          `;
+        });
+        html += `</div></div>`;
+      }
+
+      if (oppsMatch.length > 0) {
+        html += `<div><p class="text-[10px] font-black uppercase text-slate-500 mb-1 px-1">OPORTUNIDADES (${oppsMatch.length})</p><div class="space-y-1">`;
+        oppsMatch.forEach(o => {
+          html += `
+            <div onclick="nav('oportunidades')" class="p-2 rounded-xl hover:bg-blue-50 cursor-pointer flex items-center justify-between">
+              <div>
+                <p class="text-xs font-bold text-slate-900">${resaltarCoincidencia(o["ID Oportunidad"], query)} - ${resaltarCoincidencia(o.Cursos_ISEM, query)}</p>
+                <p class="text-[10px] text-slate-500">${o.Empresa}</p>
+              </div>
+              <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 text-[10px] font-bold">Oportunidad</span>
+            </div>
+          `;
+        });
+        html += `</div></div>`;
+      }
+
+      if (html === '') {
+        html = `<div class="p-4 text-center text-slate-400 text-xs">Sin resultados para "${query}"</div>`;
+      }
+
+      content.innerHTML = html;
+      dropdown.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function resaltarCoincidencia(texto, query) {
+      if (!texto) return '';
+      const idx = texto.toLowerCase().indexOf(query.toLowerCase());
+      if (idx === -1) return texto;
+      const sub = texto.substring(idx, idx + query.length);
+      return texto.substring(0, idx) + `<span class="bg-yellow-200 text-slate-900 font-extrabold rounded px-0.5">${sub}</span>` + texto.substring(idx + query.length);
+    }
+
+    function limpiarBusquedaGlobal() {
+      document.getElementById('global-search').value = '';
+      document.getElementById('btn-clear-search').classList.add('hidden');
+      document.getElementById('search-results-dropdown').classList.add('hidden');
+      if (seccionActiva === 'clientes') renderizarClientes('');
+      else if (seccionActiva === 'oportunidades') renderizarOportunidades('');
+      else if (seccionActiva === 'renovaciones') renderizarRenovaciones('');
+    }
+
+    function irACliente(idCliente) {
+      document.getElementById('search-results-dropdown').classList.add('hidden');
+      nav('clientes');
+      renderizarClientes(idCliente);
+    }
+
+    function generarAlertasOperativas() {
+      const list = document.getElementById('notif-list');
+      list.innerHTML = '';
+      const alertas = [];
+
+      CRM_DATA.oportunidades.forEach(o => {
+        if ((o.Dias_Estancado || 0) > 10) {
+          alertas.push({
+            tipo: 'critica',
+            titulo: `Oportunidad Estancada (${o["ID Oportunidad"]})`,
+            desc: `${o.Empresa} - lleva ${o.Dias_Estancado} días sin cambio`,
+            accion: () => nav('oportunidades')
+          });
+        }
+      });
+
+      CRM_DATA.renovaciones.forEach(r => {
+        if (r.Estado_Seguimiento === 'Nuevo' || r.Estado_Seguimiento === 'Pendiente') {
+          alertas.push({
+            tipo: 'renovacion',
+            titulo: `Renovación Pendiente (${r["ID Renovación"]})`,
+            desc: `${r.Empresa} - ${r.Cursos_ISEM}`,
+            accion: () => nav('renovaciones')
+          });
+        }
+      });
+
+      document.getElementById('notif-badge-count').innerText = alertas.length;
+      document.getElementById('notif-panel-badge').innerText = `${alertas.length} Pendientes`;
+
+      if (alertas.length === 0) {
+        list.innerHTML = `<div class="p-4 text-center text-slate-400 text-xs">No hay alertas activas.</div>`;
+        return;
+      }
+
+      alertas.forEach(a => {
+        const item = document.createElement('div');
+        item.className = 'p-2.5 rounded-xl hover:bg-slate-50 cursor-pointer transition flex items-start gap-3';
+        item.onclick = a.accion;
+        
+        const badgeColor = a.tipo === 'critica' ? 'bg-rose-50 text-rose-600' : 'bg-amber-50 text-amber-600';
+        const icon = a.tipo === 'critica' ? 'alert-triangle' : 'refresh-cw';
+
+        item.innerHTML = `
+          <div class="p-1.5 rounded-lg ${badgeColor} shrink-0 mt-0.5">
+            <i data-lucide="${icon}" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <p class="font-bold text-slate-900 text-xs">${a.titulo}</p>
+            <p class="text-[11px] text-slate-500 mt-0.5">${a.desc}</p>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+
+      lucide.createIcons();
+    }
+
+    function togglePanelNotificaciones() {
+      document.getElementById('notif-panel').classList.toggle('hidden');
+    }
+
+    function mostrarAyuda() {
+      mostrarToast('Soporte CRM ISEM: Sistemas Comercial B2B');
+    }
+
+    function renderizarKPIs() {
+      const oppActivas = CRM_DATA.oportunidades.filter(o => !String(o.Estado_Contrato).toLowerCase().includes('perdido') && !String(o.Estado_Contrato).toLowerCase().includes('cancelado')).length;
+      document.getElementById('kpi-opp-activas').innerText = oppActivas;
+      document.getElementById('kpi-clientes-unicos').innerText = CRM_DATA.clientes.length;
+
+      const cursosEjecucion = CRM_DATA.oportunidades.filter(o => 
+        String(o.Estado_Contrato).trim().toLowerCase() === 'en ejecución' ||
+        String(o.Estado_Contrato).trim().toLowerCase() === 'en ejecucion'
+      ).length;
+      document.getElementById('kpi-cursos-ejecucion').innerText = cursosEjecucion;
+
+      const alertasCriticas = CRM_DATA.oportunidades.filter(o => (o.Dias_Estancado || 0) > 10).length;
+      document.getElementById('kpi-alertas-criticas').innerText = alertasCriticas;
+
+      const confirmadosSinProg = CRM_DATA.oportunidades.filter(o => String(o.Estado_Contrato).trim().toLowerCase() === 'confirmado').length;
+      document.getElementById('kpi-confirmados-sin-prog').innerText = confirmadosSinProg;
+
+      let sumaDias = 0;
+      CRM_DATA.oportunidades.forEach(o => { sumaDias += (parseInt(o.Dias_Estancado, 10) || 0); });
+      const avgCiclo = CRM_DATA.oportunidades.length > 0 ? (sumaDias / CRM_DATA.oportunidades.length).toFixed(1) : 0.0;
+      document.getElementById('kpi-tiempo-ciclo').innerText = avgCiclo;
+    }
+
+    function renderizarGraficos() {
+      const estados = ["Prospecto", "En Negociación", "Propuesta", "En Ejecución", "Ganado", "Perdido", "Confirmado"];
+      const conteoEstados = estados.map(est => CRM_DATA.oportunidades.filter(o => String(o.Estado_Contrato).trim() === est).length);
+
+      const ctxPipeline = document.getElementById('chartPipeline').getContext('2d');
+      if (chartPipelineInstance) chartPipelineInstance.destroy();
+
+      chartPipelineInstance = new Chart(ctxPipeline, {
+        type: 'bar',
+        data: {
+          labels: estados,
+          datasets: [{
+            label: 'Oportunidades',
+            data: conteoEstados,
+            backgroundColor: ['#3B82F6', '#F59E0B', '#8B5CF6', '#00A859', '#059669', '#EF4444', '#F59E0B'],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, datalabels: { display: false } },
+          scales: {
+            x: { grid: { color: '#F1F5F9' }, ticks: { color: '#64748B', stepSize: 1 } },
+            y: { grid: { display: false }, ticks: { color: '#334155', font: { weight: 'bold', size: 10 } } }
+          }
+        }
+      });
+
+      const tiposEmpresa = ["Compañía Minera", "Contratista", "Subcontratista", "Conexa"];
+      const conteoTipos = [48, 36, 12, 9];
+
+      const mapaReal = {};
+      CRM_DATA.clientes.forEach(c => {
+        const t = c.Tipo_Empresa || 'Compañía Minera';
+        mapaReal[t] = (mapaReal[t] || 0) + 1;
+      });
+
+      const dataFinal = Object.keys(mapaReal).length > 0 ? Object.values(mapaReal) : conteoTipos;
+      const labelsFinal = Object.keys(mapaReal).length > 0 ? Object.keys(mapaReal) : tiposEmpresa;
+
+      const ctxTipo = document.getElementById('chartTipoEmpresa').getContext('2d');
+      if (chartTipoEmpresaInstance) chartTipoEmpresaInstance.destroy();
+
+      chartTipoEmpresaInstance = new Chart(ctxTipo, {
+        type: 'doughnut',
+        data: {
+          labels: labelsFinal,
+          datasets: [{
+            data: dataFinal,
+            backgroundColor: ['#2563EB', '#65A30D', '#F59E0B', '#A855F7'],
+            borderWidth: 2,
+            borderColor: '#FFFFFF'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { 
+              position: window.innerWidth < 640 ? 'bottom' : 'right', 
+              labels: { color: '#334155', font: { size: 10, weight: '600' } } 
+            },
+            datalabels: {
+              color: '#1E293B',
+              font: { weight: 'extrabold', size: window.innerWidth < 640 ? 8 : 10 },
+              formatter: (val, ctx) => {
+                let sum = 0;
+                let dataArr = ctx.chart.data.datasets[0].data;
+                dataArr.map(d => { sum += d; });
+                let percentage = Math.round((val * 100) / sum) + "%";
+                return `${val} (${percentage})`;
+              }
+            }
+          },
+          cutout: '60%'
+        }
+      });
+
+      const cursosDefault = ["Entrenando al Entrenador", "Rescate Minero 2026", "Trabajos en Altura", "IPERC Continuo", "LOTO Bloqueo"];
+      const conteoCursosDefault = [14, 12, 10, 8, 7];
+
+      const cursosMap = {};
+      CRM_DATA.oportunidades.forEach(o => {
+        if (o.Cursos_ISEM) cursosMap[o.Cursos_ISEM] = (cursosMap[o.Cursos_ISEM] || 0) + 1;
+      });
+
+      const cursosLabels = Object.keys(cursosMap).length > 0 ? Object.keys(cursosMap).slice(0, 5) : cursosDefault;
+      const cursosData = Object.keys(cursosMap).length > 0 ? Object.values(cursosMap).slice(0, 5) : conteoCursosDefault;
+
+      const ctxCursos = document.getElementById('chartCursosTop').getContext('2d');
+      if (chartCursosTopInstance) chartCursosTopInstance.destroy();
+
+      chartCursosTopInstance = new Chart(ctxCursos, {
+        type: 'bar',
+        data: {
+          labels: cursosLabels,
+          datasets: [{
+            label: 'Cantidad',
+            data: cursosData,
+            backgroundColor: '#0D9488',
+            borderRadius: 4
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { 
+            legend: { display: false },
+            datalabels: {
+              anchor: 'end',
+              align: 'end',
+              color: '#334155',
+              font: { weight: 'bold', size: 10 },
+              formatter: (val) => val
+            }
+          },
+          scales: {
+            x: { grid: { color: '#F1F5F9' }, ticks: { color: '#64748B' } },
+            y: { grid: { display: false }, ticks: { color: '#334155', font: { size: 9 } } }
+          }
+        }
+      });
+
+      const motivosDefault = ["Proveedor competidor", "Sin presupuesto", "No respondió seguimiento", "Cambio de prioridad", "Falta disponibilidad"];
+      const conteoMotivosDefault = [9, 7, 6, 4, 3];
+
+      const motivosMap = {};
+      CRM_DATA.oportunidades.forEach(o => {
+        if (o.Motivo_Perdida) motivosMap[o.Motivo_Perdida] = (motivosMap[o.Motivo_Perdida] || 0) + 1;
+      });
+
+      const motivosLabels = Object.keys(motivosMap).length > 0 ? Object.keys(motivosMap).slice(0, 5) : motivosDefault;
+      const motivosData = Object.keys(motivosMap).length > 0 ? Object.values(motivosMap).slice(0, 5) : conteoMotivosDefault;
+
+      const ctxMotivos = document.getElementById('chartMotivosPerdida').getContext('2d');
+      if (chartMotivosPerdidaInstance) chartMotivosPerdidaInstance.destroy();
+
+      chartMotivosPerdidaInstance = new Chart(ctxMotivos, {
+        type: 'bar',
+        data: {
+          labels: motivosLabels,
+          datasets: [{
+            label: 'Cantidad',
+            data: motivosData,
+            backgroundColor: '#E11D48',
+            borderRadius: 4
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { 
+            legend: { display: false },
+            datalabels: {
+              anchor: 'end',
+              align: 'end',
+              color: '#334155',
+              font: { weight: 'bold', size: 10 },
+              formatter: (val) => val
+            }
+          },
+          scales: {
+            x: { grid: { color: '#F1F5F9' }, ticks: { color: '#64748B' } },
+            y: { grid: { display: false }, ticks: { color: '#334155', font: { size: 9 } } }
+          }
+        }
+      });
+    }
+
+    function renderizarTablaEstancadas() {
+      const tbody = document.getElementById('tb-dashboard-estancadas');
+      tbody.innerHTML = '';
+      const criticas = CRM_DATA.oportunidades.filter(o => (o.Dias_Estancado || 0) > 0);
+      const lista = criticas.length > 0 ? criticas : CRM_DATA.oportunidades;
+
+      lista.slice(0, 5).forEach(o => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors';
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-isem-600">${o["ID Oportunidad"]}</td>
+          <td class="px-4 py-3 font-bold text-slate-900">${o.Empresa}</td>
+          <td class="px-4 py-3">${obtenerBadgeEstado(o.Estado_Contrato)}</td>
+          <td class="px-4 py-3 text-rose-600 font-extrabold font-mono">${o.Dias_Estancado || 0} días</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderizarTablaConfirmados() {
+      const tbody = document.getElementById('tb-dashboard-confirmados');
+      tbody.innerHTML = '';
+      const confirmados = CRM_DATA.oportunidades.filter(o => String(o.Estado_Contrato).trim().toLowerCase() === 'confirmado' || o.Estado_Contrato === 'En Negociación');
+      const lista = confirmados.length > 0 ? confirmados : CRM_DATA.oportunidades;
+
+      lista.slice(0, 5).forEach(o => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors';
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-isem-600">${o["ID Oportunidad"]}</td>
+          <td class="px-4 py-3 font-bold text-slate-900">${o.Empresa}</td>
+          <td class="px-4 py-3 text-slate-800 font-semibold">${o.Cursos_ISEM || '-'}</td>
+          <td class="px-4 py-3 text-slate-600 font-medium">${o.Responsable_Comercial || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function obtenerBadgeEstado(estado) {
+      const est = String(estado || '').trim();
+      let colorClass = 'bg-slate-100 text-slate-700 border-slate-300';
+
+      if (est.toLowerCase().includes('prospecto')) colorClass = 'bg-blue-50 text-blue-700 border-blue-200 font-bold';
+      else if (est.toLowerCase().includes('negociación') || est.toLowerCase().includes('negociacion') || est.toLowerCase().includes('confirmado')) colorClass = 'bg-amber-50 text-amber-700 border-amber-200 font-bold';
+      else if (est.toLowerCase().includes('propuesta')) colorClass = 'bg-purple-50 text-purple-700 border-purple-200 font-bold';
+      else if (est.toLowerCase().includes('ejecución') || est.toLowerCase().includes('ejecucion')) colorClass = 'bg-emerald-50 text-emerald-700 border-emerald-200 font-bold';
+      else if (est.toLowerCase().includes('ganado') || est.toLowerCase().includes('renovado')) colorClass = 'bg-isem-50 text-isem-700 border-isem-300 font-extrabold';
+      else if (est.toLowerCase().includes('perdido')) colorClass = 'bg-rose-50 text-rose-700 border-rose-200 font-bold';
+
+      return `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${colorClass}">${est || 'N/A'}</span>`;
+    }
+
+    function renderizarClientes(filtro = '') {
+      const tbody = document.getElementById('tb-clientes');
+      tbody.innerHTML = '';
+      const filtrados = CRM_DATA.clientes.filter(c => {
+        const txt = `${c["ID Cliente"]} ${c.Empresa} ${c.Compañía_Minera} ${c.Responsable_Comercial} ${c.Contacto_Principal}`.toLowerCase();
+        return txt.includes(filtro.toLowerCase());
+      });
+
+      filtrados.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors';
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-isem-600">${c["ID Cliente"] || '-'}</td>
+          <td class="px-4 py-3 font-bold text-slate-900">${c.Empresa || '-'}</td>
+          <td class="px-4 py-3"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-medium">${c.Tipo_Empresa || '-'}</span></td>
+          <td class="px-4 py-3 font-medium">${c.Unidad_Minera || '-'}</td>
+          <td class="px-4 py-3 font-medium">${c.Compañía_Minera || '-'}</td>
+          <td class="px-4 py-3 text-slate-600 font-medium">${c.Responsable_Comercial || '-'}</td>
+          <td class="px-4 py-3 font-medium">${c.Contacto_Principal || '-'}</td>
+          <td class="px-4 py-3 text-slate-500 font-medium">${c.Correo_Corporativo || ''}<br>${c.Teléfono || ''}</td>
+          <td class="px-4 py-3 text-center">
+            <button onclick="editarCliente('${c["ID Cliente"]}')" class="px-3 py-1 bg-isem-50 hover:bg-isem-100 text-isem-700 border border-isem-200 rounded-xl font-bold transition">
+              Actualizar
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // RENDERIZADO DE TABLA DE OPORTUNIDADES (CON COLUMNA DE FACILITADOR MOSTRADA)
+    function renderizarOportunidades(filtro = '') {
+      const tbody = document.getElementById('tb-oportunidades');
+      tbody.innerHTML = '';
+      const filtrados = CRM_DATA.oportunidades.filter(o => {
+        const txt = `${o["ID Oportunidad"]} ${o.Empresa} ${o.Cursos_ISEM} ${o.Responsable_Comercial} ${o.Facilitador} ${o.Estado_Contrato}`.toLowerCase();
+        return txt.includes(filtro.toLowerCase());
+      });
+
+      filtrados.forEach(o => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors';
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-isem-600">${o["ID Oportunidad"] || '-'}</td>
+          <td class="px-4 py-3 font-bold text-slate-900">${o.Empresa}<br><span class="text-[10px] text-slate-500 font-normal">${o.Unidad_Minera || ''}</span></td>
+          <td class="px-4 py-3 text-slate-800 font-bold">${o.Cursos_ISEM || '-'}</td>
+          <td class="px-4 py-3 text-slate-600 font-medium">${o.Responsable_Comercial || '-'}</td>
+          <td class="px-4 py-3 text-purple-700 font-bold">${o.Facilitador || '-'}</td>
+          <td class="px-4 py-3">${obtenerBadgeEstado(o.Estado_Contrato)}</td>
+          <td class="px-4 py-3 text-center font-mono font-bold text-slate-600">${o.Dias_Estancado || 0}d / ${o.Dias_Sin_Contacto || 0}d</td>
+          <td class="px-4 py-3 text-center">
+            <button onclick="abrirModalCambiarEstadoOpp('${o["ID Oportunidad"]}')" class="px-3 py-1 bg-isem-50 hover:bg-isem-100 text-isem-700 border border-isem-200 rounded-xl font-bold transition">
+              Actualizar
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderizarRenovaciones(filtro = '') {
+      const tbody = document.getElementById('tb-renovaciones');
+      tbody.innerHTML = '';
+      const filtrados = CRM_DATA.renovaciones.filter(r => {
+        const txt = `${r["ID Renovación"]} ${r.Empresa} ${r.Cursos_ISEM} ${r.Estado_Seguimiento}`.toLowerCase();
+        return txt.includes(filtro.toLowerCase());
+      });
+
+      filtrados.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors';
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-isem-600">${r["ID Renovación"] || '-'}</td>
+          <td class="px-4 py-3 font-bold text-slate-900">${r.Empresa || '-'}</td>
+          <td class="px-4 py-3 text-slate-800 font-bold">${r.Cursos_ISEM || '-'}</td>
+          <td class="px-4 py-3 font-mono font-medium">${r.Fecha_Estimada_Renovacion || '-'}</td>
+          <td class="px-4 py-3">${obtenerBadgeEstado(r.Estado_Seguimiento)}</td>
+          <td class="px-4 py-3 text-center">
+            <button onclick="abrirModalCambiarEstadoRen('${r["ID Renovación"]}')" class="px-3 py-1 bg-isem-50 hover:bg-isem-100 text-isem-700 border border-isem-200 rounded-xl font-bold transition">
+              Cambiar
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderizarHistorial() {
+      const tbody = document.getElementById('tb-historial');
+      tbody.innerHTML = '';
+      CRM_DATA.historial.forEach(h => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors';
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-isem-600">${h["ID Oportunidad"] || '-'}</td>
+          <td class="px-4 py-3 font-bold text-slate-900">${h.Empresa || '-'}</td>
+          <td class="px-4 py-3">${obtenerBadgeEstado(h["Estado Anterior"])}</td>
+          <td class="px-4 py-3">${obtenerBadgeEstado(h["Estado Nuevo"])}</td>
+          <td class="px-4 py-3 font-mono text-slate-600 font-medium">${h["Fecha Cambio"] || '-'}</td>
+          <td class="px-4 py-3 text-slate-700 font-medium">${h["Responsable Comercial"] || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function poblarDesplegablesFormularios() {
+      const cfg = CRM_DATA.configuracion || {};
+
+      poblarSelect('cli-tipo', cfg["Tipo_Empresa"] || ["Compañía Minera", "Contratista", "Subcontratista", "Conexa"]);
+      poblarSelect('cli-compania', cfg["Compañía_Minera"] || ["Southern Perú", "Sociedad Minera Cerro Verde", "Compañía Minera Antamina"]);
+      poblarSelect('cli-unidad', cfg["Unidad_Minera"] || ["Cuajone", "Toquepala", "Cerro Verde", "Antamina"]);
+      poblarSelect('opp-unidad', cfg["Unidad_Minera"] || ["Cuajone", "Toquepala", "Cerro Verde", "Antamina"]);
+      poblarSelect('cli-responsable', cfg["Responsables_Comerciales"] || ["Carlos Mendoza", "Ana Lucía Torres", "Roberto Gómez", "María Salazar", "Samuel Quito", "Fiori Ramos"]);
+      poblarSelect('opp-responsable', cfg["Responsables_Comerciales"] || ["Carlos Mendoza", "Ana Lucía Torres", "Roberto Gómez", "María Salazar", "Samuel Quito", "Fiori Ramos"]);
+      poblarSelect('opp-nuevo-responsable', cfg["Responsables_Comerciales"] || ["Carlos Mendoza", "Ana Lucía Torres", "Roberto Gómez", "María Salazar", "Samuel Quito", "Fiori Ramos"]);
+      poblarSelect('opp-curso', cfg["Cursos_ISEM"] || ["Entrenando al Entrenador", "Rescate Minero 2026", "Trabajos en Altura", "IPERC Continuo"]);
+      poblarSelect('opp-nuevo-curso', cfg["Cursos_ISEM"] || ["Entrenando al Entrenador", "Rescate Minero 2026", "Trabajos en Altura", "IPERC Continuo"]);
+      poblarSelect('ren-curso', cfg["Cursos_ISEM"] || ["Entrenando al Entrenador", "Rescate Minero 2026", "Trabajos en Altura", "IPERC Continuo"]);
+      poblarSelect('opp-modalidad', cfg["Modalidad"] || ["Presencial", "Virtual En Vivo", "E-Learning"]);
+      poblarSelect('opp-nueva-modalidad', cfg["Modalidad"] || ["Presencial", "Virtual En Vivo", "E-Learning"]);
+      poblarSelect('opp-facilitador', cfg["Facilitadores"] || ["Roberto Gómez", "María Paredes", "Juan Pérez", "Carlos Mendoza", "Fiori Ramos"]);
+      poblarSelect('opp-nuevo-facilitador', cfg["Facilitadores"] || ["Roberto Gómez", "María Paredes", "Juan Pérez", "Carlos Mendoza", "Fiori Ramos"]);
+      poblarSelect('opp-fuente', cfg["Fuente_Lead"] || ["Web ISEM", "Feria Minera", "Cliente Recurrente"]);
+      poblarSelect('opp-estado', cfg["Estados_Contrato"] || ["Prospecto", "En Negociación", "Propuesta", "En Ejecución", "Confirmado", "Cerrado - Ganado", "Cerrado - Perdido"]);
+      poblarSelect('opp-nuevo-estado', cfg["Estados_Contrato"] || ["Prospecto", "En Negociación", "Propuesta", "En Ejecución", "Confirmado", "Cerrado - Ganado", "Cerrado - Perdido"]);
+      poblarSelect('opp-motivo-perdida', cfg["Motivos_Perdida"] || ["Proveedor competidor", "Sin presupuesto", "No respondió seguimiento"]);
+      poblarSelect('ren-estado', cfg["Estado_Seguimiento"] || ["Nuevo", "Contactado", "En Proceso", "Renovado"]);
+      poblarSelect('ren-nuevo-estado', cfg["Estado_Seguimiento"] || ["Nuevo", "Contactado", "En Proceso", "Renovado"]);
+
+      const nombresEmpresas = CRM_DATA.clientes.map(c => c.Empresa);
+      const listaEmpresas = nombresEmpresas.length > 0 ? nombresEmpresas : ["Sociedad Minera Cerro Verde", "Southern Perú Copper Corp", "Compañía Minera Antamina"];
+      poblarSelect('opp-empresa', listaEmpresas);
+      poblarSelect('ren-empresa', listaEmpresas);
+    }
+
+    function poblarSelect(idSelect, opciones) {
+      const select = document.getElementById(idSelect);
+      if (!select) return;
+      select.innerHTML = '';
+      opciones.forEach(opt => {
+        const el = document.createElement('option');
+        el.value = opt;
+        el.innerText = opt;
+        select.appendChild(el);
+      });
+    }
+
+    function abrirModalCliente() {
+      document.getElementById('modal-cliente-titulo').innerText = 'Registrar Nuevo Cliente B2B';
+      document.getElementById('form-cliente').reset();
+      document.getElementById('cli-id').value = '';
+      document.getElementById('modal-cliente').classList.remove('hidden');
+    }
+
+    function editarCliente(id) {
+      const c = CRM_DATA.clientes.find(cli => String(cli["ID Cliente"]).trim() === String(id).trim());
+      if (!c) return;
+
+      document.getElementById('modal-cliente-titulo').innerText = `Actualizar Cliente (${id})`;
+      document.getElementById('cli-id').value = c["ID Cliente"];
+      document.getElementById('cli-empresa').value = c.Empresa || '';
+      document.getElementById('cli-tipo').value = c.Tipo_Empresa || '';
+      document.getElementById('cli-compania').value = c.Compañía_Minera || '';
+      document.getElementById('cli-unidad').value = c.Unidad_Minera || '';
+      document.getElementById('cli-responsable').value = c.Responsable_Comercial || '';
+      document.getElementById('cli-contacto').value = c.Contacto_Principal || '';
+      document.getElementById('cli-cargo').value = c.Cargo || '';
+      document.getElementById('cli-telefono').value = c.Teléfono || '';
+      document.getElementById('cli-correo').value = c.Correo_Corporativo || '';
+
+      document.getElementById('modal-cliente').classList.remove('hidden');
+    }
+
+    function guardarCliente(e) {
+      e.preventDefault();
+      const id = document.getElementById('cli-id').value;
+      const datos = {
+        idCliente: id,
+        empresa: document.getElementById('cli-empresa').value,
+        tipoEmpresa: document.getElementById('cli-tipo').value,
+        companiaMinera: document.getElementById('cli-compania').value,
+        unidadMinera: document.getElementById('cli-unidad').value,
+        responsableComercial: document.getElementById('cli-responsable').value,
+        contactoPrincipal: document.getElementById('cli-contacto').value,
+        cargo: document.getElementById('cli-cargo').value,
+        telefono: document.getElementById('cli-telefono').value,
+        correoCorporativo: document.getElementById('cli-correo').value
+      };
+
+      const esEditar = id !== '';
+      const funcionServidor = esEditar ? 'actualizarCliente' : 'registrarCliente';
+      const btn = document.getElementById('btn-save-cliente');
+      btn.disabled = true;
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(res => {
+            btn.disabled = false;
+            cerrarModal('modal-cliente');
+            if (res.success) { mostrarToast(res.message); cargarDatosCompletos(); }
+            else { mostrarToast(res.message, true); }
+          })
+          .withFailureHandler(err => {
+            btn.disabled = false;
+            mostrarToast('Error: ' + err.message, true);
+          })[funcionServidor](datos);
+      } else {
+        setTimeout(() => {
+          btn.disabled = false;
+          cerrarModal('modal-cliente');
+          if (esEditar) {
+            const idx = CRM_DATA.clientes.findIndex(c => c["ID Cliente"] === id);
+            if (idx !== -1) CRM_DATA.clientes[idx] = { ...CRM_DATA.clientes[idx], ...datos, "ID Cliente": id, "Compañía_Minera": datos.companiaMinera, "Unidad_Minera": datos.unidadMinera, "Responsable_Comercial": datos.responsableComercial, "Contacto_Principal": datos.contactoPrincipal, "Correo_Corporativo": datos.correoCorporativo, "Tipo_Empresa": datos.tipoEmpresa, "Teléfono": datos.telefono };
+          } else {
+            const newId = `CLI-00${CRM_DATA.clientes.length + 1}`;
+            CRM_DATA.clientes.push({ "ID Cliente": newId, "Empresa": datos.empresa, "Tipo_Empresa": datos.tipoEmpresa, "Unidad_Minera": datos.unidadMinera, "Compañía_Minera": datos.companiaMinera, "Responsable_Comercial": datos.responsableComercial, "Contacto_Principal": datos.contactoPrincipal, "Cargo": datos.cargo, "Teléfono": datos.telefono, "Correo_Corporativo": datos.correoCorporativo });
+          }
+          renderizarTodo();
+          mostrarToast('Cliente guardado (Demo)');
+        }, 400);
+      }
+    }
+
+    function abrirModalOportunidad() {
+      document.getElementById('form-oportunidad').reset();
+      document.getElementById('modal-oportunidad').classList.remove('hidden');
+    }
+
+    function guardarOportunidad(e) {
+      e.preventDefault();
+      const datos = {
+        empresa: document.getElementById('opp-empresa').value,
+        unidadMinera: document.getElementById('opp-unidad').value,
+        cursosIsem: document.getElementById('opp-curso').value,
+        modalidad: document.getElementById('opp-modalidad').value,
+        facilitador: document.getElementById('opp-facilitador').value,
+        responsableComercial: document.getElementById('opp-responsable').value,
+        fuenteLead: document.getElementById('opp-fuente').value,
+        estadoContrato: document.getElementById('opp-estado').value
+      };
+
+      const btn = document.getElementById('btn-save-opp');
+      btn.disabled = true;
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(res => {
+            btn.disabled = false;
+            cerrarModal('modal-oportunidad');
+            if (res.success) { mostrarToast(res.message); cargarDatosCompletos(); }
+            else { mostrarToast(res.message, true); }
+          })
+          .withFailureHandler(err => {
+            btn.disabled = false;
+            mostrarToast('Error: ' + err.message, true);
+          })
+          .registrarOportunidad(datos);
+      } else {
+        setTimeout(() => {
+          btn.disabled = false;
+          cerrarModal('modal-oportunidad');
+          const newId = `OP-2026-00${CRM_DATA.oportunidades.length + 1}`;
+          CRM_DATA.oportunidades.push({
+            "ID Oportunidad": newId,
+            "Empresa": datos.empresa,
+            "Unidad_Minera": datos.unidadMinera,
+            "Facilitador": datos.facilitador,
+            "Cursos_ISEM": datos.cursosIsem,
+            "Modalidad": datos.modalidad,
+            "Responsable_Comercial": datos.responsableComercial,
+            "Estado_Contrato": datos.estadoContrato,
+            "Fuente_Lead": datos.fuenteLead,
+            "Dias_Estancado": 0,
+            "Dias_Sin_Contacto": 0
+          });
+          renderizarTodo();
+          mostrarToast('Oportunidad registrada (Demo)');
+        }, 400);
+      }
+    }
+
+    // ABRIR MODAL ACTUALIZAR DATOS DE OPORTUNIDAD (SE PREPOPULAN TODOS LOS CAMPOS)
+    function abrirModalCambiarEstadoOpp(idOpp) {
+      const opp = CRM_DATA.oportunidades.find(o => String(o["ID Oportunidad"]).trim() === String(idOpp).trim());
+      if (!opp) return;
+
+      document.getElementById('estado-opp-id').value = idOpp;
+      document.getElementById('lbl-opp-info').innerText = `${idOpp} - ${opp.Empresa} (${opp.Unidad_Minera || 'Sin Unidad'})`;
+      
+      document.getElementById('opp-nuevo-estado').value = opp.Estado_Contrato || 'Prospecto';
+      document.getElementById('opp-nuevo-curso').value = opp.Cursos_ISEM || '';
+      document.getElementById('opp-nueva-modalidad').value = opp.Modalidad || '';
+      document.getElementById('opp-nuevo-responsable').value = opp.Responsable_Comercial || '';
+      document.getElementById('opp-nuevo-facilitador').value = opp.Facilitador || '';
+
+      toggleMotivoPerdida(document.getElementById('opp-nuevo-estado').value);
+
+      document.getElementById('modal-estado-opp').classList.remove('hidden');
+    }
+
+    function toggleMotivoPerdida(val) {
+      const div = document.getElementById('div-motivo-perdida');
+      if (String(val).toLowerCase().includes('perdido')) div.classList.remove('hidden');
+      else div.classList.add('hidden');
+    }
+
+    // GUARDAR ACTUALIZACIÓN MULTI-CAMPO DE OPORTUNIDAD
+    function guardarEstadoOportunidad(e) {
+      e.preventDefault();
+      const idOpp = document.getElementById('estado-opp-id').value;
+      const nuevoEstado = document.getElementById('opp-nuevo-estado').value;
+      const nuevoCurso = document.getElementById('opp-nuevo-curso').value;
+      const nuevaModalidad = document.getElementById('opp-nueva-modalidad').value;
+      const nuevoResponsable = document.getElementById('opp-nuevo-responsable').value;
+      const nuevoFacilitador = document.getElementById('opp-nuevo-facilitador').value;
+      const motivoPerdida = String(nuevoEstado).toLowerCase().includes('perdido') ? document.getElementById('opp-motivo-perdida').value : '';
+
+      const btn = document.getElementById('btn-update-estado');
+      btn.disabled = true;
+
+      const payload = {
+        idOportunidad: idOpp,
+        nuevoEstado: nuevoEstado,
+        cursosIsem: nuevoCurso,
+        modalidad: nuevaModalidad,
+        responsableComercial: nuevoResponsable,
+        facilitador: nuevoFacilitador,
+        motivoPerdida: motivoPerdida
+      };
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(res => {
+            btn.disabled = false;
+            cerrarModal('modal-estado-opp');
+            if (res.success) { mostrarToast(res.message); cargarDatosCompletos(); }
+            else { mostrarToast(res.message, true); }
+          })
+          .withFailureHandler(err => {
+            btn.disabled = false;
+            mostrarToast('Error: ' + err.message, true);
+          })
+          .actualizarEstadoContrato(payload);
+      } else {
+        setTimeout(() => {
+          btn.disabled = false;
+          cerrarModal('modal-estado-opp');
+          const opp = CRM_DATA.oportunidades.find(o => o["ID Oportunidad"] === idOpp);
+          if (opp) {
+            const estadoAnterior = opp.Estado_Contrato;
+            opp.Estado_Contrato = nuevoEstado;
+            opp.Cursos_ISEM = nuevoCurso;
+            opp.Modalidad = nuevaModalidad;
+            opp.Responsable_Comercial = nuevoResponsable;
+            opp.Facilitador = nuevoFacilitador;
+            if (motivoPerdida) opp.Motivo_Perdida = motivoPerdida;
+
+            CRM_DATA.historial.push({
+              "ID Oportunidad": idOpp,
+              "Empresa": opp.Empresa,
+              "Estado Anterior": estadoAnterior,
+              "Estado Nuevo": nuevoEstado,
+              "Fecha Cambio": new Date().toISOString().split('T')[0],
+              "Responsable Comercial": nuevoResponsable
+            });
+          }
+          renderizarTodo();
+          mostrarToast('Oportunidad actualizada exitosamente (Demo)');
+        }, 400);
+      }
+    }
+
+    function abrirModalRenovacion() {
+      document.getElementById('form-renovacion').reset();
+      document.getElementById('modal-renovacion').classList.remove('hidden');
+    }
+
+    function guardarRenovacion(e) {
+      e.preventDefault();
+      const datos = {
+        empresa: document.getElementById('ren-empresa').value,
+        cursosIsem: document.getElementById('ren-curso').value,
+        fechaEstimadaRenovacion: document.getElementById('ren-fecha').value,
+        estadoSeguimiento: document.getElementById('ren-estado').value
+      };
+
+      const btn = document.getElementById('btn-save-renovacion');
+      btn.disabled = true;
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(res => {
+            btn.disabled = false;
+            cerrarModal('modal-renovacion');
+            if (res.success) { mostrarToast(res.message); cargarDatosCompletos(); }
+            else { mostrarToast(res.message, true); }
+          })
+          .withFailureHandler(err => {
+            btn.disabled = false;
+            mostrarToast('Error: ' + err.message, true);
+          })
+          .programarRenovacion(datos);
+      } else {
+        setTimeout(() => {
+          btn.disabled = false;
+          cerrarModal('modal-renovacion');
+          const newId = `REN-00${CRM_DATA.renovaciones.length + 1}`;
+          CRM_DATA.renovaciones.push({
+            "ID Renovación": newId,
+            "Empresa": datos.empresa,
+            "Cursos_ISEM": datos.cursosIsem,
+            "Fecha_Estimada_Renovacion": datos.fechaEstimadaRenovacion,
+            "Estado_Seguimiento": datos.estadoSeguimiento
+          });
+          renderizarTodo();
+          mostrarToast('Renovación programada (Demo)');
+        }, 400);
+      }
+    }
+
+    function abrirModalCambiarEstadoRen(idRen) {
+      const ren = CRM_DATA.renovaciones.find(r => String(r["ID Renovación"]).trim() === String(idRen).trim());
+      if (!ren) return;
+
+      document.getElementById('ren-estado-id').value = idRen;
+      document.getElementById('lbl-ren-info').innerText = `${idRen} - ${ren.Empresa} (${ren.Cursos_ISEM})`;
+      document.getElementById('ren-nuevo-estado').value = ren.Estado_Seguimiento || 'Nuevo';
+
+      document.getElementById('modal-estado-ren').classList.remove('hidden');
+    }
+
+    function guardarEstadoRenovacion(e) {
+      e.preventDefault();
+      const idRen = document.getElementById('ren-estado-id').value;
+      const nuevoEstado = document.getElementById('ren-nuevo-estado').value;
+
+      const btn = document.getElementById('btn-update-ren');
+      btn.disabled = true;
+
+      const payload = { idRenovacion: idRen, nuevoEstado: nuevoEstado };
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(res => {
+            btn.disabled = false;
+            cerrarModal('modal-estado-ren');
+            if (res.success) { mostrarToast(res.message); cargarDatosCompletos(); }
+            else { mostrarToast(res.message, true); }
+          })
+          .withFailureHandler(err => {
+            btn.disabled = false;
+            mostrarToast('Error: ' + err.message, true);
+          })
+          .cambiarEstadoRenovacion(payload);
+      } else {
+        setTimeout(() => {
+          btn.disabled = false;
+          cerrarModal('modal-estado-ren');
+          const ren = CRM_DATA.renovaciones.find(r => r["ID Renovación"] === idRen);
+          if (ren) ren.Estado_Seguimiento = nuevoEstado;
+          renderizarTodo();
+          mostrarToast('Estado de renovación cambiado (Demo)');
+        }, 400);
+      }
+    }
+
+    function cerrarModal(idModal) {
+      document.getElementById(idModal).classList.add('hidden');
+    }
+
+    function mostrarToast(mensaje, esError = false) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-message');
+      const toastIcon = document.getElementById('toast-icon');
+
+      toastMsg.innerText = mensaje;
+      if (esError) {
+        toastIcon.className = 'text-rose-500';
+        toastIcon.innerHTML = `<i data-lucide="alert-circle" class="w-5 h-5"></i>`;
+      } else {
+        toastIcon.className = 'text-isem-500';
+        toastIcon.innerHTML = `<i data-lucide="check-circle-2" class="w-5 h-5"></i>`;
+      }
+      lucide.createIcons();
+
+      toast.classList.remove('hidden', 'translate-y-4');
+      toast.classList.add('translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-4');
+        setTimeout(() => toast.classList.add('hidden'), 300);
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
