@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRM B2B ISEM - Gestión Comercial de Capacitación Minera</title>
+
+  <!-- Fuentes e Iconos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- Hoja de Estilos Principal -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ==================== PANTALLA DE LOGIN ==================== -->
+  <div class="login-overlay hidden" id="loginOverlay">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg width="36" height="36" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="16" fill="#00875A"/>
+          <path d="M16 6L24 11V21L16 26L8 21V11L16 6Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+          <circle cx="16" cy="16" r="4" fill="white"/>
+        </svg>
+      </div>
+      <h2 class="login-title">CRM B2B ISEM</h2>
+      <p class="login-subtitle">Gestión Comercial de Capacitación Minera</p>
+      
+      <form id="loginForm">
+        <div class="form-group" style="margin-bottom:14px; text-align:left;">
+          <label>Correo Corporativo</label>
+          <input type="email" id="loginEmail" placeholder="crojas@isem.org.pe" required value="crojas@isem.org.pe">
+        </div>
+        <div class="form-group" style="margin-bottom:20px; text-align:left;">
+          <label>Contraseña</label>
+          <input type="password" id="loginPass" placeholder="••••••••" required value="carlos123">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:10px;">
+          <i class="ri-login-box-line"></i> Ingresar al CRM
+        </button>
+      </form>
+      <p style="font-size:0.72rem; color:#9CA3AF; margin-top:16px;">Demo: crojas@isem.org.pe / carlos123 (o admin@isem.org.pe / admin123)</p>
+    </div>
+  </div>
+
+  <!-- Contenedor App -->
+  <div class="app-container">
+
+    <!-- Sidebar Navegación Lateral -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="16" fill="#00875A"/>
+            <path d="M16 6L24 11V21L16 26L8 21V11L16 6Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+            <circle cx="16" cy="16" r="4" fill="white"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>ISEM B2B</h1>
+          <span>SEGURIDAD MINERA</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">PRINCIPAL</div>
+        <a class="nav-item active" data-view="dashboard">
+          <i class="ri-dashboard-3-line"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <div class="nav-section-title">GESTIÓN COMERCIAL</div>
+        <a class="nav-item" data-view="clientes">
+          <i class="ri-building-4-line"></i>
+          <span>Clientes</span>
+          <span class="nav-badge" id="sidebarBadgeClients" style="background:var(--primary-light); color:var(--primary-dark);">0</span>
+        </a>
+        <a class="nav-item" data-view="oportunidades">
+          <i class="ri-focus-3-line"></i>
+          <span>Oportunidades</span>
+          <span class="nav-badge">48</span>
+        </a>
+        <a class="nav-item" data-view="renovaciones">
+          <i class="ri-calendar-check-line"></i>
+          <span>Renovaciones de Servicios</span>
+          <span class="nav-badge" style="background:#F59E0B;">5</span>
+        </a>
+
+        <div class="nav-section-title">ADMINISTRACIÓN & SCRIPT</div>
+        <a class="nav-item" data-view="historial">
+          <i class="ri-history-line"></i>
+          <span>Auditoría Temporal</span>
+        </a>
+        <a class="nav-item" data-view="configuracion">
+          <i class="ri-settings-4-line"></i>
+          <span>Conexión Google Sheets</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>CRM B2B ISEM v1.0.0</span>
+        <i class="ri-shield-check-fill" style="color:#10B981;"></i>
+      </div>
+    </aside>
+
+    <!-- Área de Contenido Principal -->
+    <div class="main-wrapper">
+
+      <!-- Header Superior -->
+      <header class="top-header">
+        <div class="header-left">
+          <i class="ri-menu-line mobile-toggle" id="mobileToggle"></i>
+          <div class="header-title-group">
+            <h2 id="pageTitle">CRM B2B ISEM</h2>
+            <p id="pageSubtitle">Gestión Comercial de Capacitación para la Industria Minera</p>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- Buscador Global -->
+          <div class="search-box">
+            <i class="ri-search-line"></i>
+            <input type="text" id="globalSearch" placeholder="Buscar empresa, contacto u oportunidad..." autocomplete="off">
+            <div id="searchResultsDropdown" class="search-results-dropdown hidden"></div>
+          </div>
+
+          <div class="header-actions">
+            <button class="icon-btn" id="notificationBell" title="Alertas de Riesgo">
+              <i class="ri-notification-3-line"></i>
+              <span class="badge-dot">5</span>
+            </button>
+            <button class="icon-btn" title="Ayuda" onclick="alert('Documentación del CRM B2B ISEM. Si tienes consultas comunícate con soporte@isem.org.pe')">
+              <i class="ri-question-line"></i>
+            </button>
+
+            <!-- Perfil de Usuario Comercial Interactivo -->
+            <div class="user-profile-wrapper">
+              <div class="user-profile" id="userProfileTrigger">
+                <div class="user-avatar" id="headerUserAvatar">CR</div>
+                <div class="user-info">
+                  <span class="user-name" id="headerUserName">Carlos Rojas</span>
+                  <span class="user-role" id="headerUserRole">Comercial ISEM</span>
+                </div>
+                <i class="ri-arrow-down-s-line" style="font-size:0.9rem; color:#6B7280;"></i>
+              </div>
+
+              <!-- Desplegable -->
+              <div class="dropdown-menu" id="userDropdown">
+                <div class="dropdown-item" onclick="ISEM_UI.switchView('configuracion')">
+                  <i class="ri-settings-3-line"></i> Configurar Conexión
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item" onclick="ISEM_UI.logout()" style="color:var(--danger);">
+                  <i class="ri-logout-box-r-line"></i> Cerrar Sesión
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </header>
+
+      <!-- Cuerpo con Scroll y Vistas -->
+      <main class="content-body">
+
+        <!-- ==================== VISTA 1: DASHBOARD ==================== -->
+        <section id="view-dashboard" class="view-panel active">
+
+          <!-- Grilla de Tarjetas KPI -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrapper kpi-icon-green">
+                <i class="ri-focus-2-line"></i>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-title">OPORTUNIDADES ACTIVAS</span>
+                <div class="kpi-value">48</div>
+                <div class="kpi-trend up"><i class="ri-arrow-up-line"></i> 12% vs mes anterior</div>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrapper kpi-icon-blue">
+                <i class="ri-wallet-3-line"></i>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-title">VALOR POTENCIAL</span>
+                <div class="kpi-value">S/ 2,456,800</div>
+                <div class="kpi-trend up"><i class="ri-arrow-up-line"></i> 18% vs mes anterior</div>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrapper kpi-icon-purple">
+                <i class="ri-file-paper-2-line"></i>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-title">CONTRATOS CERRADOS (MES)</span>
+                <div class="kpi-value">12</div>
+                <div class="kpi-trend up"><i class="ri-arrow-up-line"></i> 9% vs mes anterior</div>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrapper kpi-icon-orange">
+                <i class="ri-money-dollar-circle-line"></i>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-title">INGRESOS FACTURADOS</span>
+                <div class="kpi-value">S/ 1,258,400</div>
+                <div class="kpi-trend up"><i class="ri-arrow-up-line"></i> 15% vs mes anterior</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fila 1: Embudo + Tabla Críticas + Alertas -->
+          <div class="dashboard-grid-row-1">
+
+            <!-- Embudo Comercial (Pipeline Funnel) -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="ri-filter-3-line"></i>
+                  <span>Embudo Comercial (Pipeline)</span>
+                </div>
+              </div>
+              <div class="funnel-container">
+                <div class="funnel-stage">
+                  <div class="funnel-stage-info">
+                    <span class="funnel-stage-name">Prospección</span>
+                    <span class="funnel-stage-count">18 (37%)</span>
+                  </div>
+                  <span class="funnel-stage-value">S/ 652,300</span>
+                </div>
+                <div class="funnel-stage">
+                  <div class="funnel-stage-info">
+                    <span class="funnel-stage-name">Calificación</span>
+                    <span class="funnel-stage-count">11 (23%)</span>
+                  </div>
+                  <span class="funnel-stage-value">S/ 398,500</span>
+                </div>
+                <div class="funnel-stage">
+                  <div class="funnel-stage-info">
+                    <span class="funnel-stage-name">Cotización</span>
+                    <span class="funnel-stage-count">9 (19%)</span>
+                  </div>
+                  <span class="funnel-stage-value">S/ 512,700</span>
+                </div>
+                <div class="funnel-stage">
+                  <div class="funnel-stage-info">
+                    <span class="funnel-stage-name">Negociación</span>
+                    <span class="funnel-stage-count">7 (15%)</span>
+                  </div>
+                  <span class="funnel-stage-value">S/ 633,800</span>
+                </div>
+                <div class="funnel-stage">
+                  <div class="funnel-stage-info">
+                    <span class="funnel-stage-name">Cierre</span>
+                    <span class="funnel-stage-count">3 (6%)</span>
+                  </div>
+                  <span class="funnel-stage-value">S/ 259,500</span>
+                </div>
+              </div>
+              <div class="funnel-total-box">
+                <span>Total Potencial</span>
+                <span style="color:var(--primary); font-size:1.1rem;">S/ 2,456,800</span>
+              </div>
+            </div>
+
+            <!-- Triaje Comercial: Oportunidades Críticas -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="ri-alarm-warning-line" style="color:var(--danger);"></i>
+                  <span>Oportunidades Críticas (Estancadas)</span>
+                </div>
+                <span class="card-badge">7</span>
+              </div>
+              <div class="table-responsive">
+                <table class="crm-table">
+                  <thead>
+                    <tr>
+                      <th>ID Oportunidad</th>
+                      <th>Empresa Cliente</th>
+                      <th>Estado Actual</th>
+                      <th>Días Estancado</th>
+                      <th>Días Sin Contacto</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tableCriticalBody">
+                    <!-- Renderizado dinámico mediante JS -->
+                  </tbody>
+                </table>
+              </div>
+              <a class="card-action" style="margin-top:12px; text-align:center;" onclick="ISEM_UI.switchView('oportunidades')">Ver todas las oportunidades →</a>
+            </div>
+
+            <!-- Alertas y Recordatorios -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="ri-notification-badge-line"></i>
+                  <span>Alertas y Recordatorios</span>
+                </div>
+              </div>
+              <div class="alerts-list">
+                <div class="alert-item danger">
+                  <i class="ri-error-warning-line alert-icon"></i>
+                  <div class="alert-content">
+                    <p>7 oportunidades estancadas > 10 días</p>
+                    <span>Requieren atención inmediata</span>
+                  </div>
+                </div>
+                <div class="alert-item warning">
+                  <i class="ri-time-line alert-icon"></i>
+                  <div class="alert-content">
+                    <p>5 contratos por vencer en 30 días</p>
+                    <span>Ver sección Renovaciones</span>
+                  </div>
+                </div>
+                <div class="alert-item info">
+                  <i class="ri-user-unfollow-line alert-icon"></i>
+                  <div class="alert-content">
+                    <p>12 oportunidades sin contacto > 15 días</p>
+                    <span>Seguimiento requerido</span>
+                  </div>
+                </div>
+                <div class="alert-item success">
+                  <i class="ri-checkbox-circle-line alert-icon"></i>
+                  <div class="alert-content">
+                    <p>3 renovaciones confirmadas esta semana</p>
+                    <span>Ingresos recurrentes asegurados</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Fila 2: Tiempo Promedio + Responsable + Top Cursos -->
+          <div class="dashboard-grid-row-2">
+
+            <!-- Auditoría Temporal: Tiempo Promedio por Etapa -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="ri-speed-up-line"></i>
+                  <span>Tiempo Promedio por Etapa (días)</span>
+                </div>
+              </div>
+              <div class="chart-container" id="chartPipelineVelocity">
+                <!-- Gráfico de barras horizontales -->
+              </div>
+            </div>
+
+            <!-- Oportunidades por Responsable Comercial -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="ri-pie-chart-line"></i>
+                  <span>Oportunidades por Responsable</span>
+                </div>
+              </div>
+              <div class="chart-container" id="chartRepDistribution">
+                <!-- Gráfico Donut SVG -->
+              </div>
+            </div>
+
+            <!-- Top 5 Cursos Solicitados -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="ri-book-read-line"></i>
+                  <span>Top 5 Cursos Solicitados</span>
+                </div>
+              </div>
+              <div class="chart-container" id="chartTopCourses">
+                <!-- Gráfico de Cursos -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Fila 3: Actividad Reciente + Riesgo Cliente + Próximas Renovaciones -->
+          <div class="dashboard-grid-row-3">
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="ri-history-line"></i>
+                  <span>Actividad Reciente Comercial</span>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="crm-table">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Tipo</th>
+                      <th>Empresa</th>
+                      <th>Oportunidad</th>
+                      <th>Actividad</th>
+                      <th>Responsable</th>
+                      <th>Resultado</th>
+                      <th>Próxima Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>20/07/2026 10:30</td>
+                      <td><i class="ri-phone-line" style="color:var(--primary);"></i></td>
+                      <td><strong>Antamina</strong></td>
+                      <td>OP-0001</td>
+                      <td>Llamada comercial</td>
+                      <td>Carlos Rojas</td>
+                      <td>Interés confirmado</td>
+                      <td>Enviar propuesta final</td>
+                    </tr>
+                    <tr>
+                      <td>20/07/2026 09:15</td>
+                      <td><i class="ri-mail-line" style="color:var(--info);"></i></td>
+                      <td><strong>Cerro Verde</strong></td>
+                      <td>OP-0010</td>
+                      <td>Envío de cotización</td>
+                      <td>Ana Torres</td>
+                      <td>Propuesta enviada</td>
+                      <td>Esperar feedback</td>
+                    </tr>
+                    <tr>
+                      <td>19/07/2026 16:45</td>
+                      <td><i class="ri-user-voice-line" style="color:var(--warning);"></i></td>
+                      <td><strong>Las Bambas</strong></td>
+                      <td>OP-0035</td>
+                      <td>Reunión de avance</td>
+                      <td>Luis Vargas</td>
+                      <td>En evaluación interna</td>
+                      <td>Seguimiento 25/07</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          <!-- Card: Próximas Renovaciones -->
+          <div class="card" style="margin-top:20px;">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="ri-calendar-check-line" style="color:var(--primary);"></i>
+                <span>Próximas Renovaciones</span>
+              </div>
+            </div>
+            <div id="upcomingRenewalsList"></div>
+          </div>
+
+        </section>
+
+
+        <!-- ==================== VISTA 2: OPORTUNIDADES ==================== -->
+        <section id="view-oportunidades" class="view-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h3 style="font-size:1.1rem; font-weight:700;">Listado General de Oportunidades</h3>
+            <button class="btn btn-primary" data-modal-target="modalNewOpportunity">
+              <i class="ri-add-line"></i> Nueva Oportunidad
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="table-responsive">
+              <table class="crm-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Empresa / Unidad</th>
+                    <th>Curso ISEM</th>
+                    <th>Responsable</th>
+                    <th>Valor PEN</th>
+                    <th>Estado Contrato</th>
+                    <th>Días Estancado/Sin Contacto</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="tableOpsBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VISTA 3: CLIENTES & ECOSISTEMA ==================== -->
+        <section id="view-clientes" class="view-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h3 style="font-size:1.1rem; font-weight:700;">Jerarquización y Mapeo Topológico B2B</h3>
+            <button class="btn btn-primary" data-modal-target="modalNewClient">
+              <i class="ri-user-add-line"></i> Registrar Nuevo Cliente
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="table-responsive">
+              <table class="crm-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Empresa</th>
+                    <th>Tipo Empresa</th>
+                    <th>Unidad Minera</th>
+                    <th>Región</th>
+                    <th>Titular Asociado (Jerarquía)</th>
+                    <th>Responsable</th>
+                    <th>Segmento</th>
+                    <th>Contacto Principal</th>
+                    <th>Correo / Teléfono</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="tableClientsBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VISTA 4: RENOVACIONES ==================== -->
+        <section id="view-renovaciones" class="view-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h3 style="font-size:1.1rem; font-weight:700;">Previsión y Gestión de Renovaciones de Servicios</h3>
+            <button class="btn btn-primary" data-modal-target="modalNewRenewal">
+              <i class="ri-calendar-2-line"></i> Programar Renovación
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="table-responsive">
+              <table class="crm-table">
+                <thead>
+                  <tr>
+                    <th>ID Renovación</th>
+                    <th>Empresa Cliente</th>
+                    <th>Curso ISEM</th>
+                    <th>Fecha Estimada Caducidad</th>
+                    <th>Estado Seguimiento</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tableRenovacionesBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VISTA 5: AUDITORÍA TEMPORAL ==================== -->
+        <section id="view-historial" class="view-panel">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="ri-history-line" style="color:var(--primary);"></i>
+                <span>Trazabilidad de Transiciones de Estado (Historial_Tiempos)</span>
+              </div>
+            </div>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:14px;">
+              Registros inmutables generados automáticamente por el disparador <code>onEdit</code> en Google Apps Script cuando una oportunidad cambia de etapa.
+            </p>
+            <div class="table-responsive">
+              <table class="crm-table">
+                <thead>
+                  <tr>
+                    <th>ID Oportunidad</th>
+                    <th>Empresa</th>
+                    <th>Estado Anterior</th>
+                    <th>Estado Nuevo</th>
+                    <th>Fecha y Hora Cambio</th>
+                    <th>Responsable Comercial</th>
+                  </tr>
+                </thead>
+                <tbody id="tableHistorialBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VISTA 6: CONFIGURACIÓN GOOGLE SHEETS ==================== -->
+        <section id="view-configuracion" class="view-panel">
+          <div class="card" style="max-width:750px;">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="ri-google-fill" style="color:var(--primary);"></i>
+                <span>Conexión con Google Apps Script Backend</span>
+              </div>
+            </div>
+            <div style="font-size:0.85rem; line-height:1.6; color:#374151;">
+              <p>Puedes conectar este Dashboard Web en tiempo real con tu hoja de cálculo de Google Sheets ingresando la URL del Web App desplegado en Apps Script.</p>
+              
+              <div class="form-group" style="margin:20px 0;">
+                <label style="font-weight:700;">URL del Despliegue de Aplicación Web (Apps Script):</label>
+                <input type="url" id="appsScriptUrlInput" placeholder="https://script.google.com/macros/s/.../exec">
+              </div>
+
+              <div style="display:flex; gap:12px;">
+                <button class="btn btn-primary" onclick="ISEM_UI.saveAppsScriptConfig()">
+                  <i class="ri-save-line"></i> Guardar y Probar Conexión
+                </button>
+                <button class="btn btn-secondary" onclick="localStorage.removeItem('ISEM_APPS_SCRIPT_URL'); location.reload();">
+                  Restablecer a Modo Demo Offline
+                </button>
+              </div>
+
+              <hr style="margin:24px 0; border:none; border-top:1px solid #E5E7EB;">
+
+              <h4 style="font-weight:700; color:var(--primary-dark); margin-bottom:8px;">Archivos listos para copiar a Apps Script:</h4>
+              <ul style="padding-left:20px; font-size:0.82rem; color:#4B5563;">
+                <li><code>appsscript/Code.gs</code> ➔ Endpoints REST API</li>
+                <li><code>appsscript/Triggers.gs</code> ➔ Disparador inmutable <code>onEdit</code></li>
+                <li><code>appsscript/Setup.gs</code> ➔ Generador automático de hojas</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+  </div>
+
+
+  <!-- ==================== MODALES ==================== -->
+
+  <!-- Modal Notificaciones -->
+  <div class="modal-overlay" id="modalNotifications">
+    <div class="modal-card" style="max-width:480px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="ri-notification-3-line" style="color:var(--danger);"></i> Alertas Operativas CRM</h3>
+        <button class="close-btn close-modal">&times;</button>
+      </div>
+      <div class="alerts-list">
+        <div class="alert-item danger">
+          <i class="ri-error-warning-line alert-icon"></i>
+          <div class="alert-content">
+            <p>7 Oportunidades Estancadas > 10 Días</p>
+            <span>Requieren llamada inmediata con tomadores de decisión.</span>
+          </div>
+        </div>
+        <div class="alert-item warning">
+          <i class="ri-time-line alert-icon"></i>
+          <div class="alert-content">
+            <p>5 Contratos por Vencer en 30 Días</p>
+            <span>Revisar sección Renovaciones Anexo 6.</span>
+          </div>
+        </div>
+        <div class="alert-item info">
+          <i class="ri-user-unfollow-line alert-icon"></i>
+          <div class="alert-content">
+            <p>12 Oportunidades Sin Contacto > 15 Días</p>
+            <span>Riesgo de abandono por parte del ejecutivo asignado.</span>
+          </div>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary close-modal">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Nueva Oportunidad -->
+  <div class="modal-overlay" id="modalNewOpportunity">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Registrar Nueva Oportunidad</h3>
+        <button class="close-btn close-modal">&times;</button>
+      </div>
+      <form id="formNewOpportunity">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Empresa Cliente</label>
+            <input type="text" id="opEmpresa" required placeholder="Ej: Compañía Minera Antamina">
+          </div>
+          <div class="form-group">
+            <label>Unidad Minera</label>
+            <input type="text" id="opUnidad" required placeholder="Ej: Yanacancha">
+          </div>
+          <div class="form-group">
+            <label>Curso ISEM</label>
+            <select id="opCurso" required>
+              <option value="Cursos del Anexo 6">Cursos del Anexo 6</option>
+              <option value="Entrenando al Entrenador">Entrenando al Entrenador</option>
+              <option value="Certificado Nebosh">Certificado Nebosh</option>
+              <option value="II Seminario TTT">II Seminario TTT</option>
+              <option value="Rescate Minero 2026">Rescate Minero 2026</option>
+              <option value="Trabajos en Altura">Trabajos en Altura</option>
+              <option value="LOTO Bloqueo">LOTO Bloqueo</option>
+              <option value="Espacios Confinados">Espacios Confinados</option>
+              <option value="IPERC Continuo">IPERC Continuo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Responsable Comercial</label>
+            <select id="opResponsable" required>
+              <option value="Carlos Rojas">Carlos Rojas</option>
+              <option value="Ana Torres">Ana Torres</option>
+              <option value="Luis Vargas">Luis Vargas</option>
+              <option value="María Salazar">María Salazar</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Valor Contrato (PEN S/)</label>
+            <input type="number" id="opValor" required placeholder="Ej: 95000">
+          </div>
+          <div class="form-group">
+            <label>Estado Inicial</label>
+            <select id="opEstado">
+              <option value="Prospección">Prospección</option>
+              <option value="Calificación">Calificación</option>
+              <option value="Cotización">Cotización</option>
+            </select>
+          </div>
+          <div class="form-group full-width">
+            <label>Fuente del Lead</label>
+            <select id="opFuente">
+              <option value="Cliente Recurrente">Cliente Recurrente</option>
+              <option value="Referido">Referido</option>
+              <option value="Feria Minera PERUMIN">Feria Minera PERUMIN</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="Portal Web">Portal Web</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Oportunidad</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Modal Nuevo Cliente -->
+  <div class="modal-overlay" id="modalNewClient">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Registrar Nuevo Cliente B2B</h3>
+        <button class="close-btn close-modal">&times;</button>
+      </div>
+      <form id="formNewClient">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nombre Empresa</label>
+            <input type="text" id="cliEmpresa" required placeholder="Ej: San Martín Contratistas">
+          </div>
+          <div class="form-group">
+            <label>Tipo de Empresa</label>
+            <select id="cliTipo" required>
+              <option value="Compañía Minera">Compañía Minera</option>
+              <option value="Contratista">Contratista</option>
+              <option value="Conexa">Conexa</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Unidad Minera</label>
+            <input type="text" id="cliUnidad" placeholder="Ej: Yanacancha / Toromocho">
+          </div>
+          <div class="form-group">
+            <label>Región</label>
+            <input type="text" id="cliRegion" required placeholder="Ej: Áncash">
+          </div>
+          <div class="form-group">
+            <label>Titular Minero Asociado (Jerarquía)</label>
+            <input type="text" id="cliTitular" placeholder="Ej: Compañía Minera Antamina (o N/A)">
+          </div>
+          <div class="form-group">
+            <label>Responsable Comercial</label>
+            <select id="cliResponsable">
+              <option value="Carlos Rojas">Carlos Rojas</option>
+              <option value="Ana Torres">Ana Torres</option>
+              <option value="Luis Vargas">Luis Vargas</option>
+              <option value="María Salazar">María Salazar</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Segmento Minero</label>
+            <select id="cliSegmento">
+              <option value="Gran Minería">Gran Minería</option>
+              <option value="Mediana Minería">Mediana Minería</option>
+              <option value="Pequeña Minería">Pequeña Minería</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Contacto Principal</label>
+            <input type="text" id="cliContacto" placeholder="Nombre completo">
+          </div>
+          <div class="form-group">
+            <label>Cargo Contacto</label>
+            <input type="text" id="cliCargo" placeholder="Ej: Gerente SSOMA">
+          </div>
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input type="text" id="cliTelefono" placeholder="987654321">
+          </div>
+          <div class="form-group full-width">
+            <label>Correo Corporativo</label>
+            <input type="email" id="cliCorreo" placeholder="contacto@empresa.com">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Registrar Cliente</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Editar / Actualizar Cliente -->
+  <div class="modal-overlay" id="modalEditClient">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="ri-edit-line" style="color:var(--primary);"></i> Actualizar Datos de Cliente B2B</h3>
+        <button class="close-btn close-modal">&times;</button>
+      </div>
+      <form id="formEditClient">
+        <input type="hidden" id="editCliId">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nombre Empresa</label>
+            <input type="text" id="editCliEmpresa" required placeholder="Ej: San Martín Contratistas">
+          </div>
+          <div class="form-group">
+            <label>Tipo de Empresa</label>
+            <select id="editCliTipo" required></select>
+          </div>
+          <div class="form-group">
+            <label>Unidad Minera</label>
+            <input type="text" id="editCliUnidad" placeholder="Ej: Yanacancha / Toromocho">
+          </div>
+          <div class="form-group">
+            <label>Región</label>
+            <input type="text" id="editCliRegion" required placeholder="Ej: Áncash">
+          </div>
+          <div class="form-group">
+            <label>Titular Minero Asociado (Jerarquía)</label>
+            <input type="text" id="editCliTitular" placeholder="Ej: Compañía Minera Antamina (o N/A)">
+          </div>
+          <div class="form-group">
+            <label>Responsable Comercial</label>
+            <select id="editCliResponsable"></select>
+          </div>
+          <div class="form-group">
+            <label>Segmento Minero</label>
+            <select id="editCliSegmento"></select>
+          </div>
+          <div class="form-group">
+            <label>Contacto Principal</label>
+            <input type="text" id="editCliContacto" placeholder="Nombre completo">
+          </div>
+          <div class="form-group">
+            <label>Cargo Contacto</label>
+            <input type="text" id="editCliCargo" placeholder="Ej: Gerente SSOMA">
+          </div>
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input type="text" id="editCliTelefono" placeholder="987654321">
+          </div>
+          <div class="form-group full-width">
+            <label>Correo Corporativo</label>
+            <input type="email" id="editCliCorreo" placeholder="contacto@empresa.com">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary"><i class="ri-save-line"></i> Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Modal Nueva Renovación -->
+  <div class="modal-overlay" id="modalNewRenewal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Programar Alerta de Renovación de Servicios</h3>
+        <button class="close-btn close-modal">&times;</button>
+      </div>
+      <form id="formNewRenewal">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Empresa Cliente</label>
+            <input type="text" id="renEmpresa" required placeholder="Ej: Compañía Minera Antamina">
+          </div>
+          <div class="form-group full-width">
+            <label>Curso ISEM a Renovar</label>
+            <select id="renCurso" required>
+              <option value="Cursos del Anexo 6">Cursos del Anexo 6 (D.S. 024-2016-EM)</option>
+              <option value="Trabajos en Altura">Trabajos en Altura</option>
+              <option value="LOTO Bloqueo">LOTO Bloqueo</option>
+              <option value="Espacios Confinados">Espacios Confinados</option>
+              <option value="IPERC Continuo">IPERC Continuo</option>
+            </select>
+          </div>
+          <div class="form-group full-width">
+            <label>Fecha Estimada Caducidad / Renovación</label>
+            <input type="date" id="renFecha" required>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Agendar Renovación</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Actualizar Estado de Contrato -->
+  <div class="modal-overlay" id="modalChangeOpStage">
+    <div class="modal-card" style="max-width:460px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="ri-edit-box-line" style="color:var(--primary);"></i> Actualizar Estado_Contrato</h3>
+        <button class="close-btn close-modal">&times;</button>
+      </div>
+      <form id="formChangeOpStage">
+        <input type="hidden" id="changeOpId">
+        <div style="margin-bottom:16px; background:#F8FAFC; padding:12px 16px; border-radius:8px; border:1px solid #E2E8F0;">
+          <div style="font-size:0.75rem; color:#64748B; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Oportunidad Seleccionada</div>
+          <strong id="changeOpInfo" style="font-size:0.92rem; color:#1E293B; display:block; margin-top:4px;">-</strong>
+          <div style="margin-top:6px; font-size:0.8rem; color:#475569;">
+            Estado Actual: <span id="changeOpCurrentBadge" class="badge-stage prospeccion" style="display:inline-block; font-size:0.72rem;">-</span>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:20px;">
+          <label style="font-weight:700; color:#1E293B;">Seleccionar Nuevo Estado de Contrato (Pipeline / Cierre)</label>
+          <select id="changeOpNewStage" required style="width:100%; padding:10px; border-radius:6px; border:1px solid #CBD5E1; font-weight:600; font-size:0.9rem; background:#FFFFFF;">
+            <!-- Opciones pobladas dinámicamente desde la Hoja Configuración (Estados_Contrato) -->
+          </select>
+        </div>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary"><i class="ri-save-line"></i> Guardar Nuevo Estado</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Scripts de la Aplicación -->
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
